@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hostel_finder/features/auth/login_screen.dart';
+import 'package:hostel_finder/features/auth/login/login_screen.dart';
 
 void main() async {
 
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
       ),
       home: const LoginScreen(),
     );
