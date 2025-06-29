@@ -8,7 +8,7 @@ class AuthNavigationButton extends StatelessWidget {
 
   final String question;
   final String routeName;
-  final Widget route;
+  final String route;
 
   const AuthNavigationButton({super.key, required this.question, required this.routeName, required this.route});
 
