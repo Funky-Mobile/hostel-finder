@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/core/custom_scaffold_body.dart';
-import 'package:hostel_finder/features/auth/login/login_screen.dart';
+import 'package:hostel_finder/core/naviagtor/app_navigator.dart';
 import 'package:hostel_finder/features/auth/signup/widgets/signup_form.dart';
 import 'package:hostel_finder/features/auth/widgets/auth_button.dart';
 import 'package:hostel_finder/features/auth/widgets/auth_screens_header.dart';
@@ -75,10 +76,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     );
                   } else {
                     //Todo: sign up user
+                    //Todo: navigate to home screen
+                    AppNavigator.popAllUntil(context, AppRoutes.homeScreen);
                   }
                 }),
 
-                AuthNavigationButton(question: CustomAppStrings.alreadyHaveAccountString, routeName: CustomAppStrings.loginString, route: LoginScreen()),
+                AuthNavigationButton(question: CustomAppStrings.alreadyHaveAccountString, routeName: CustomAppStrings.loginString, route: AppRoutes.loginScreen),
 
               ],
             ),
