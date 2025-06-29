@@ -10,6 +10,7 @@ class CustomAppStrings {
   static String alreadyHaveAccountString = "Already have an account?";
 
   static String registerString = "Register";
+  static String orString = "OR";
   static String loginString = "Login";
 
   static String signUpHeaderString = "Create an account";
@@ -22,9 +23,10 @@ class CustomAppStrings {
   static String confirmPasswordString = "Confirm Password";
 
 
-
-
-  //General
-  static String orString = "OR";
-
+  //Home screen strings
+  static String hiString = "Hi,";
+  static String handWaveString = "👋";
+  static String searchHostelString = "Search your hostel...";
+  static String homeHeaderString = "Lets find the best hotels around the world";
+  static String popularHostelsString = "Popular hostels";
 }
