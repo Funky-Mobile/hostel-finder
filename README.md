@@ -1,16 +1,28 @@
-# hostel_finder
+# 🏠 Hostel Finder App
 
-A new Flutter project.
+**Hostel Finder** is a mobile application built with Flutter that helps students and individuals easily locate hostels near their schools or current location. Whether you're a university student looking for off-campus housing or someone relocating to a new area, Hostel Finder simplifies the process of finding safe, affordable, and convenient accommodation.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- 🔍 **Search Hostels:** Find hostels based on proximity to a selected school or your current location.
+- 🗺️ **Map Integration:** View hostels on an interactive map for better decision-making.
+- 📌 **School-Based Filtering:** Filter hostels based on nearby schools or institutions.
+- 🏷️ **Detailed Listings:** View hostel photos, pricing, amenities, and contact information.
+- ❤️ **Favorites:** Save hostels to your favorites list for later viewing.
+- 🛎️ **Booking Inquiry:** Express interest or contact hostel managers directly through the app.
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Getting Started
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Prerequisites
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- Android Studio / VS Code / Xcode
+- Emulator or real device
+
+### Installation
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/Funky-Mobile/hostel-finder.git
+   cd hostel-finder
