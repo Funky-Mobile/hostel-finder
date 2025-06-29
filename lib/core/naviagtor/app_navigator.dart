@@ -4,6 +4,6 @@ class AppNavigator {
 
   static void navigateTo(BuildContext context, String route) => Navigator.of(context).pushNamed(route);
 
-  static void popAllUntil(BuildContext context, String route) => Navigator.of(context).popUntil(ModalRoute.withName(route));
+  static void popAllUntil(BuildContext context, String route) => Navigator.of(context).pushNamedAndRemoveUntil(route, (Route r) => false);
 
 }
