@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hostel_finder/features/auth/login/login_screen.dart';
+import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/firebase_options.dart';
 
 void main() async {
@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
       ),
-      home: const LoginScreen(),
+      initialRoute: AppRoutes.loginScreen,
+      routes: AppRoutes.routes,
     );
   }
 }
