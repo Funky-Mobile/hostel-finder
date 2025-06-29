@@ -6,7 +6,6 @@
 
 - 🔍 **Search Hostels:** Find hostels based on proximity to a selected school or your current location.
 - 🗺️ **Map Integration:** View hostels on an interactive map for better decision-making.
-- 📌 **School-Based Filtering:** Filter hostels based on nearby schools or institutions.
 - 🏷️ **Detailed Listings:** View hostel photos, pricing, amenities, and contact information.
 - ❤️ **Favorites:** Save hostels to your favorites list for later viewing.
 - 🛎️ **Booking Inquiry:** Express interest or contact hostel managers directly through the app.
