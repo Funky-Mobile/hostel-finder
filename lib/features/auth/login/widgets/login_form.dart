@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hostel_finder/shared/custom_app_labels/custom_app_body_text.dart';
-import 'package:hostel_finder/shared/text_fields/custom_text_form_field.dart';
+import 'package:hostel_finder/features/auth/widgets/auth_input_field.dart';
+import 'package:hostel_finder/shared/app_strings/custom_app_strings.dart';
+
 
 class LoginForm extends StatefulWidget {
 
@@ -18,6 +19,22 @@ class _LoginFormState extends State<LoginForm> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+
+  void _disposeTextEditingControllers() {
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
+
+
+  @override
+  void dispose() {
+    _disposeTextEditingControllers();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,33 +43,19 @@ class _LoginFormState extends State<LoginForm> {
       autovalidateMode: AutovalidateMode.onUnfocus,
       child: Column(
         children: [
-          _inputField("Full Name", "full name", _emailFocusNode, _passwordFocusNode),
-
-          _inputField("Password", "password", _passwordFocusNode, null)
-        ],
-      ),
-    );
-  }
-
-  Padding _inputField(String label, String hintText, FocusNode focusNode, FocusNode? nextFocusNode) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomAppBodyText(
-              text: "$label*",
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              textColor: Colors.white
+          AuthInputField(
+            label: CustomAppStrings.emailString,
+            hintText: CustomAppStrings.emailString.toLowerCase(),
+            controller: _emailController,
+            focusNode: _emailFocusNode,
+            nextFocusNode: _passwordFocusNode
           ),
 
-          const SizedBox(height: 8.0),
-
-          CustomTextFormField(
-            focusNode: focusNode,
-            nextFocusNode: nextFocusNode,
-            hintText: hintText,
+          AuthInputField(
+            label: CustomAppStrings.passwordString,
+            hintText: CustomAppStrings.passwordString.toLowerCase(),
+            controller: _passwordController,
+            focusNode: _passwordFocusNode
           )
         ],
       ),
