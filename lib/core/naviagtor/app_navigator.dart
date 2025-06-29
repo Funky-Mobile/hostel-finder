@@ -2,5 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppNavigator {
 
-  static void navigateTo(BuildContext context, Widget page) => Navigator.of(context).push(MaterialPageRoute(builder: (builder) => page));
+  static void navigateTo(BuildContext context, String route) => Navigator.of(context).pushNamed(route);
+
+  static void popAllUntil(BuildContext context, String route) => Navigator.of(context).popUntil(ModalRoute.withName(route));
+
 }
