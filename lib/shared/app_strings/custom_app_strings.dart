@@ -1,20 +1,30 @@
 class CustomAppStrings {
 
   //Authentication screen strings
-  static String loginHeaderText = "Welcome Back!";
-  static String loginSubHeadingText = "Login now to access amazing hostels made for only you!";
-  static String loginButtonText = "Login";
+  static String loginHeaderString = "Welcome Back!";
+  static String loginSubHeadingString = "Login now to access amazing hostels made for only you!";
+  static String loginButtonString = "Login";
 
-  static String continueWithGoogleText = "Continue With Google";
-  static String donNotHaveAccountText = "Don't have an account?";
-  static String registerText = "Register";
+  static String continueWithGoogleString = "Continue With Google";
+  static String donNotHaveAccountString = "Don't have an account?";
+  static String alreadyHaveAccountString = "Already have an account?";
+
+  static String registerString = "Register";
+  static String loginString = "Login";
+
+  static String signUpHeaderString = "Create an account";
+  static String signUpSubHeadingString = "Register now to access amazing hostels made for only you!";
+  static String signupButtonString = "Sign Up";
+
+  static String fullNameString = "Full Name";
+  static String emailString = "Email";
+  static String passwordString = "Password";
+  static String confirmPasswordString = "Confirm Password";
 
 
-  static String signUpHeaderText = "Create an account";
-  static String signUpSubHeadingText = "Register now to access amazing hostels made for only you!";
-  static String signupButtonText = "Sign Up";
+
 
   //General
-  static String orText = "OR";
+  static String orString = "OR";
 
 }
