@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../shared/app_icons/custom_app_icon.dart';
-import '../../../shared/app_strings/custom_app_strings.dart';
+import '../app_icons/custom_app_icon.dart';
+import '../app_strings/custom_app_strings.dart';
 
 class CustomAppSearchBar extends StatefulWidget {
   const CustomAppSearchBar({super.key});
@@ -34,12 +34,12 @@ class _CustomAppSearchBarState extends State<CustomAppSearchBar> {
             hintText: CustomAppStrings.searchHostelString,
             hintStyle: WidgetStatePropertyAll(
                 TextStyle(
-                    color: Colors.white54
+                    color: Colors.black45
                 )
             ),
             textStyle: WidgetStatePropertyAll(
                 TextStyle(
-                    color: Colors.white
+                    color: Colors.black
                 )
             ),
             elevation: WidgetStatePropertyAll(3),

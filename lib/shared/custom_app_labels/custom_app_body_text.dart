@@ -14,6 +14,7 @@ class CustomAppBodyText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
+        fontFamily: "Nunito",
         color: textColor ?? Colors.black,
         fontWeight: fontWeight ?? FontWeight.normal,
         fontSize: fontSize ?? 14

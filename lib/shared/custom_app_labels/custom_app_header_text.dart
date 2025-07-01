@@ -16,6 +16,7 @@ class CustomAppHeaderText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
+        fontFamily: "Poppins",
         fontSize: size ?? 32,
         color: textColor ?? Colors.black,
         fontWeight: fontWeight ?? FontWeight.normal,
