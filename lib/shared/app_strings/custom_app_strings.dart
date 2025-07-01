@@ -27,6 +27,9 @@ class CustomAppStrings {
   static String hiString = "Hi,";
   static String handWaveString = "👋";
   static String searchHostelString = "Search your hostel...";
-  static String homeHeaderString = "Lets find the best hotels around the world";
+  static String homeHeaderString = "Lets find the best hotels just for you!";
   static String popularHostelsString = "Popular hostels";
+  static String nearbyHostelsString = "Nearby hostels";
+  static String allRoomsString = "See all rooms";
+
 }

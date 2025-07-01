@@ -6,8 +6,10 @@ class CustomTextButton extends StatelessWidget {
 
   final VoidCallback onPressed;
   final String buttonText;
+  final double? buttonTextSize;
+  final Color? buttonTextColor;
 
-  const CustomTextButton({super.key, required this.onPressed, required this.buttonText});
+  const CustomTextButton({super.key, required this.onPressed, required this.buttonText, this.buttonTextSize, this.buttonTextColor});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,11 @@ class CustomTextButton extends StatelessWidget {
       style: ButtonStyle(
         padding: WidgetStatePropertyAll(EdgeInsets.all(0))
       ),
-      child: CustomAppBodyText(text: buttonText, textColor: Colors.white,),
+      child: CustomAppBodyText(
+        text: buttonText,
+        textColor: buttonTextColor ?? Colors.white,
+        fontSize: buttonTextSize,
+      ),
     );
   }
 }

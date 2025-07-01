@@ -1,9 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:hostel_finder/core/custom_scaffold_body.dart';
-import 'package:hostel_finder/features/home/widgets/custom_app_search_bar.dart';
+import 'package:hostel_finder/shared/text_fields/custom_app_search_bar.dart';
 import 'package:hostel_finder/features/home/widgets/popular_hostels.dart';
 import 'package:hostel_finder/features/home/widgets/salutation.dart';
 import 'package:hostel_finder/utils/vertical_item_spacer.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,13 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Salutation(),
 
-              VerticalItemSpacer(
-                space: MediaQuery.of(context).size.height * .025,
-                child: CustomAppSearchBar()
-              ),
+              StickyHeader(
+                header: VerticalItemSpacer(
+                    space: MediaQuery.of(context).size.height * .025,
+                    child: CustomAppSearchBar()
+                ),
 
-              PopularHostels()
-
+                content: PopularHostels()
+              )
             ],
           ),
         )
