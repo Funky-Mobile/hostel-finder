@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_finder/features/home/widgets/app_hostel_ratings.dart';
 import 'package:hostel_finder/features/home/widgets/hostel_amenities.dart';
+import 'package:hostel_finder/features/home/widgets/like_hostel_button.dart';
 import 'package:hostel_finder/shared/app_icons/custom_app_icon.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_body_text.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_header_text.dart';
@@ -29,32 +31,38 @@ class PopularHostelCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: SizedBox(
-                  height: 180,
-                  width: MediaQuery.of(context).size.width * .7,
-                  child: Image.asset(
-                    hostelImageUrl,
-                    fit: BoxFit.cover
+              Stack(
+                children: [
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: SizedBox(
+                        height: 180,
+                        width: MediaQuery.of(context).size.width * .7,
+                        child: Image.asset(
+                            hostelImageUrl,
+                            fit: BoxFit.cover
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+
+                  Positioned(
+                    right: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white60,
+                        child: LikeHostelButton()
+                      ),
+                    ),
+                  )
+                ],
               ),
 
               SizedBox(height: 8.0),
 
-              Row(
-                children: [
-                  CustomAppIcon(icon: Icons.star, color: Colors.orange),
-                  CustomAppBodyText(
-                    text: '$averageRating',
-                    textColor: Colors.orange
-                  ),
-                  CustomAppBodyText(
-                    text: '($totalRating})'
-                  )
-                ],
-              ),
+              AppHostelRatings(averageRating: averageRating, totalRating: '$totalRating'),
 
               CustomAppHeaderText(
                 text: hostelName,
