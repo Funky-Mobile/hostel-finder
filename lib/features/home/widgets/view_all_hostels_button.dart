@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../../shared/app_strings/custom_app_strings.dart';
 import '../../../shared/custom_app_labels/custom_app_header_text.dart';
-import '../../../shared/custom_buttons/keyboard_arrow_right_button.dart';
+import '../../../shared/custom_buttons/custom_text_and_icon_button.dart';
 import '../../../utils/app_device.dart';
 
 class ViewAllHostelsButton extends StatelessWidget {
@@ -19,10 +20,11 @@ class ViewAllHostelsButton extends StatelessWidget {
           children: [
             CustomAppHeaderText(text: CustomAppStrings.nearbyHostelsString, size: 24),
 
-            KeyboardArrowRightButton(
+            CustomTextAndIconButton(
                 onPressed: () {
                   onPressed();
                 },
+                icon: Icons.keyboard_arrow_right_outlined,
                 buttonText: CustomAppStrings.allRoomsString,
                 buttonTextSize: 16
             )
@@ -33,10 +35,11 @@ class ViewAllHostelsButton extends StatelessWidget {
         children: [
           CustomAppHeaderText(text: CustomAppStrings.nearbyHostelsString, size: 24),
 
-          KeyboardArrowRightButton(
+          CustomTextAndIconButton(
               onPressed: () {
                 onPressed();
               },
+              icon: Icons.keyboard_arrow_right_outlined,
               buttonText: CustomAppStrings.allRoomsString,
               buttonTextSize: 16
           )

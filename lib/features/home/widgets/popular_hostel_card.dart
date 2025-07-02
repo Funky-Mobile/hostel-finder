@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_finder/features/home/widgets/app_hostel_location.dart';
 import 'package:hostel_finder/features/home/widgets/app_hostel_ratings.dart';
 import 'package:hostel_finder/features/home/widgets/hostel_amenities.dart';
 import 'package:hostel_finder/features/home/widgets/like_hostel_button.dart';
@@ -71,15 +72,7 @@ class PopularHostelCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis
               ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomAppIcon(icon: Icons.location_on_outlined),
-                  CustomAppBodyText(
-                    text: hostelLocation
-                  )
-                ],
-              ),
+              AppHostelLocation(location: hostelLocation, color: Colors.black),
 
               SizedBox(height: 8.0),
 
