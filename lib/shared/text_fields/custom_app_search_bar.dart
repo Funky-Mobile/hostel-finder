@@ -5,7 +5,10 @@ import '../app_icons/custom_app_icon.dart';
 import '../app_strings/custom_app_strings.dart';
 
 class CustomAppSearchBar extends StatefulWidget {
-  const CustomAppSearchBar({super.key});
+
+  final VoidCallback? onTap;
+
+  const CustomAppSearchBar({super.key, this.onTap});
 
   @override
   State<CustomAppSearchBar> createState() => _CustomAppSearchBarState();
@@ -14,6 +17,7 @@ class CustomAppSearchBar extends StatefulWidget {
 class _CustomAppSearchBarState extends State<CustomAppSearchBar> {
 
   final TextEditingController _hostelSearchController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
@@ -28,6 +32,11 @@ class _CustomAppSearchBarState extends State<CustomAppSearchBar> {
       children: [
         Expanded(
           child: SearchBar(
+            onTap: () {
+              widget.onTap!();
+              _focusNode.unfocus();
+            },
+            focusNode: _focusNode,
             controller: _hostelSearchController,
             keyboardType: TextInputType.text,
             leading: CustomAppIcon(icon: CupertinoIcons.search),

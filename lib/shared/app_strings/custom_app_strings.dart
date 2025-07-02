@@ -32,4 +32,15 @@ class CustomAppStrings {
   static String nearbyHostelsString = "Nearby hostels";
   static String allRoomsString = "See all rooms";
 
+
+  //All hostels screen strings
+  static String useMyLocationString = "or use my current location";
+  static String recentSearchString = "Recent Search";
+
+
+  //Hostel details screen strings
+  static String overviewString = "Overview";
+  static String photosString = "Photos";
+  static String makeEnquiriesString = "Make Enquiries";
+  static String availableChannelsString = "Available Channels";
 }
