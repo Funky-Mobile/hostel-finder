@@ -13,7 +13,7 @@ class HostelAmenity extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [Colors.black54, Colors.white],
+              colors: [Colors.black54, Colors.black12],
               begin: FractionalOffset.topRight,
               end: Alignment.bottomRight
           ),
