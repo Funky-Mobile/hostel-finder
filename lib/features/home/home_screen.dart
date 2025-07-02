@@ -7,6 +7,9 @@ import 'package:hostel_finder/features/home/widgets/salutation.dart';
 import 'package:hostel_finder/utils/vertical_item_spacer.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
+import '../../shared/app_strings/custom_app_strings.dart';
+import '../all_hostels/all_hostels.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -32,7 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
               StickyHeader(
                 header: VerticalItemSpacer(
                     space: MediaQuery.of(context).size.height * .025,
-                    child: CustomAppSearchBar()
+                    child: CustomAppSearchBar(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (builder) => AllHostels(headerString: CustomAppStrings.recentSearchString))),
+                    )
                 ),
 
                 content: PopularHostels()
