@@ -24,6 +24,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to your location to show nearby hostels.</string>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
+    <key>GMSApiKey</key>
+    <string>AIzaSyD4DsyVCuqqmlIUOeFg1nIpZLDxuU3956k</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
