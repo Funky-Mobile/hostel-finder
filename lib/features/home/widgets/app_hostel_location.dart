@@ -16,7 +16,15 @@ class AppHostelLocation extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CustomAppIcon(icon: Icons.location_on_outlined, color: color ?? Colors.white),
-        CustomAppBodyText(text: location, textColor: color ?? Colors.white)
+        SizedBox(
+          width: MediaQuery.of(context).size.width * .5,
+          child: CustomAppBodyText(
+            text: location,
+            textColor: color ?? Colors.white,
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+          ),
+        ),
       ],
     );
   }

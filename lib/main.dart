@@ -1,11 +1,17 @@
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/firebase_options.dart';
+
+import 'features/favorites/controllers/favorites_controller.dart';
+import 'features/home/widgets/nearby_hostels.dart';
 
 void main() async {
 
@@ -14,10 +20,12 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load();
 
-  // runApp(const MyApp());
-  runApp(const MaterialApp(
-    home: MapHomeScreen(),
-  ));
+  Get.put(FavoritesController());
+
+  runApp(const MyApp());
+  // runApp(const MaterialApp(
+  //   home: MapHomeScreen(),
+  // ));
 }
 
 class MyApp extends StatelessWidget {
@@ -46,6 +54,7 @@ class MapHomeScreen extends StatefulWidget {
 
 class _MapHomeScreenState extends State<MapHomeScreen> {
   late GoogleMapController _mapController;
+  String? _mapStyle;
   final Set<Marker> _markers = {};
   LatLng? currentPosition;
   late GooglePlace _googlePlace;
@@ -56,6 +65,12 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
     super.initState();
     final apiKey = dotenv.env['GOOGLE_API_KEY']!;
     _googlePlace = GooglePlace(apiKey);
+
+    //Load map custom style
+    rootBundle.loadString("assets/map_styles/hostel_only_map_style.json").then((value) {
+      _mapStyle = value;
+    });
+
     _getCurrentLocation();
   }
 
@@ -73,23 +88,34 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
     if (currentPosition == null) return;
 
     final result = await _googlePlace.search.getNearBySearch(
-      Location(lat: currentPosition!.latitude, lng: currentPosition!.longitude),
-      2000,
-      type: "lodging",
-      keyword: "hotel",
+      Location(
+        lat: currentPosition!.latitude,
+        lng: currentPosition!.longitude,
+      ),
+      20000, // Slightly larger radius
+      // keyword: "hostel",
+      // Removed type: "lodging" to allow broader matches
     );
 
+
+
     if (result != null && result.results != null) {
-      final hostelsOnly = result.results!.where((place) {
+      final hostelsLikely = result.results!.where((place) {
         final name = place.name?.toLowerCase() ?? '';
-        final vicinity = place.vicinity?.toLowerCase() ?? '';
-        return name.contains('hotel') || vicinity.contains('hotel');
+        final types = place.types?.join(',').toLowerCase() ?? '';
+        return name.contains("hostel") || types.contains("lodging");
       }).toList();
 
+
+      for (var place in hostelsLikely) {
+        debugPrint('Found: ${place.name}');
+      }
+
+
       setState(() {
-        _hostelResults = hostelsOnly;
+        _hostelResults = hostelsLikely;
         _markers.clear();
-        for (var place in hostelsOnly) {
+        for (var place in hostelsLikely) {
           final loc = place.geometry?.location;
           if (loc != null) {
             _markers.add(
@@ -105,6 +131,10 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
           }
         }
       });
+    } else {
+      setState(() {
+        _hostelResults = [];
+      });
     }
   }
 
@@ -119,7 +149,10 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
           Expanded(
             flex: 2,
             child: GoogleMap(
-              onMapCreated: (controller) => _mapController = controller,
+              onMapCreated: (controller) {
+                _mapController = controller;
+              },
+              style: _mapStyle,
               initialCameraPosition: CameraPosition(
                 target: currentPosition!,
                 zoom: 14,
@@ -128,32 +161,41 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
               myLocationEnabled: true,
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: _hostelResults.isEmpty
-                ? const Center(child: Text("No hostels found."))
-                : ListView.builder(
-              itemCount: _hostelResults.length,
-              itemBuilder: (context, index) {
-                final place = _hostelResults[index];
-                final loc = place.geometry?.location;
-                return ListTile(
-                  leading: const Icon(Icons.apartment),
-                  title: Text(place.name ?? 'Unnamed Hostel'),
-                  subtitle: Text(place.vicinity ?? ''),
-                  onTap: () {
-                    if (loc != null) {
-                      _mapController.animateCamera(
-                        CameraUpdate.newLatLng(
-                          LatLng(loc.lat!, loc.lng!),
-                        ),
-                      );
-                    }
-                  },
-                );
-              },
-            ),
-          ),
+          // Expanded(
+          //   flex: 1,
+          //   child: _hostelResults.isEmpty
+          //       ? const Center(child: Text("No hostels found."))
+          //       : ListView.builder(
+          //         itemCount: _hostelResults.length,
+          //         itemBuilder: (context, index) {
+          //           final place = _hostelResults[index];
+          //           final loc = place.geometry?.location;
+          //           final name = place.name ?? 'Unnamed Hostel';
+          //           final vicinity = place.vicinity ?? '';
+          //           final rating = place.rating ?? 3.5;
+          //           final totalRatings = place.userRatingsTotal ?? 0;
+          //
+          //           // Handle image
+          //           final hasPhoto = place.photos != null && place.photos!.isNotEmpty;
+          //           final photoRef = hasPhoto ? place.photos!.first.photoReference : null;
+          //           final imageUrl = hasPhoto
+          //               ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$photoRef&key=${dotenv.env['GOOGLE_API_KEY']}"
+          //               : "assets/images/default_hostel.jpg"; // fallback asset
+          //
+          //           return Padding(
+          //             padding: const EdgeInsets.only(bottom: 12.0),
+          //             child: NearbyHostels(
+          //               imageUrl,
+          //               name,
+          //               vicinity,
+          //               rating,
+          //               '$totalRatings',
+          //             ),
+          //           );
+          //     },
+          //   ),
+          // )
+
         ],
       ),
     );

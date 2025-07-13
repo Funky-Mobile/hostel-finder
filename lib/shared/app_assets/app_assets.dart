@@ -1,5 +1,6 @@
 class AppAssets {
 
+  static String appIcon = "assets/icons/app/app-icon.png";
   static String googleIcon = "assets/icons/auth/google-icon.png";
 
   //Dummy hostel assets
