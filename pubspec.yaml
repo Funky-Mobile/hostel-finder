@@ -42,6 +42,9 @@ dependencies:
   geolocator: ^14.0.2
   permission_handler: ^12.0.1
   flutter_dotenv: ^5.2.1
+  url_launcher: ^6.3.2
+  shared_preferences: ^2.5.3
+  get: ^4.7.2
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +76,7 @@ flutter:
     - assets/icons/app/
     - assets/icons/auth/
     - .env
+    - assets/map_styles/hostel_only_map_style.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_finder/core/data/hostel_model.dart';
 import 'package:hostel_finder/features/hostel_details/widgets/hostel_enquiry_button.dart';
 import 'package:hostel_finder/features/hostel_details/widgets/hostel_image.dart';
 import 'package:hostel_finder/features/hostel_details/widgets/hostel_overview.dart';
@@ -9,20 +10,10 @@ import 'package:hostel_finder/shared/custom_app_labels/custom_app_header_text.da
 
 import '../home/widgets/hostel_amenities.dart';
 
-class HostelDetail extends StatefulWidget {
+class HostelDetail extends StatelessWidget {
+  final HostelModel hostel;
 
-  final List<String> hostelPhotosUrls;
-
-  const HostelDetail({super.key, required this.hostelPhotosUrls});
-
-  @override
-  State<HostelDetail> createState() => _HostelDetailState();
-}
-
-class _HostelDetailState extends State<HostelDetail> {
-
-
-  final List<String> hostelAmenities = <String>["Water 27/7", "Kitchen", "Free bed", "Learning room", "Basketball court"]; //Todo: get data from backend
+  const HostelDetail({super.key, required this.hostel});
 
   @override
   Widget build(BuildContext context) {
@@ -31,31 +22,37 @@ class _HostelDetailState extends State<HostelDetail> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
-              HostelImage(imageUrl: widget.hostelPhotosUrls[0]),
-
+              HostelImage(imageUrl: hostel.photos.first),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HostelOverview(),
-
-                    HostelAmenities(amenities: hostelAmenities),
-
-                    HostelPhotos(hostelPhotosUrls: widget.hostelPhotosUrls),
+                    HostelOverview(
+                      name: hostel.name,
+                      location: hostel.location,
+                      rating: hostel.rating,
+                      totalRatings: hostel.totalRatings,
+                      overview: hostel.overview,
+                    ),
+                    HostelAmenities(amenities: hostel.amenities),
+                    HostelPhotos(hostelPhotosUrls: hostel.photos),
                   ],
                 ),
               ),
-
             ],
           ),
         ),
       ),
-
       persistentFooterButtons: [
-        HostelEnquiryButton()
-      ]
+        HostelEnquiryButton(
+          name: hostel.name,
+          location: hostel.location,
+          reviews: hostel.reviews,
+          phoneNumber: hostel.phoneNumber,
+        ),
+      ],
     );
   }
 }
+

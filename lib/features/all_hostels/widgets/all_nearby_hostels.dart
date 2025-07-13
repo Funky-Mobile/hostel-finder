@@ -26,25 +26,25 @@ class _AllNearbyHostelsState extends State<AllNearbyHostels> {
 
           children: [
 
-            ...widget.assets.map((asset) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: InkWell(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (builder) => HostelDetail(
-                    hostelPhotosUrls: widget.assets,
-                  ))),
-
-                  borderRadius: BorderRadius.circular(10),
-                  child: NearbyHostels(
-                      asset,
-                      "Gracious Queens Hotel", //Todo: this comes from the api response
-                      "Adenta Municipality", //Todo: this comes from the api response
-                      3.4, //Todo: this comes from the api response
-                      '${231}' //Todo: this comes from the api response
-                  ),
-                ),
-              );
-            })
+            // ...widget.assets.map((asset) {
+            //   return Padding(
+            //     padding: const EdgeInsets.only(bottom: 12.0),
+            //     child: InkWell(
+            //       // onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (builder) => HostelDetail(
+            //       //   hostelPhotosUrls: widget.assets,
+            //       // ))),
+            //
+            //       borderRadius: BorderRadius.circular(10),
+            //       child: NearbyHostels(
+            //           asset,
+            //           "Gracious Queens Hotel", //Todo: this comes from the api response
+            //           "Adenta Municipality", //Todo: this comes from the api response
+            //           3.4, //Todo: this comes from the api response
+            //           '${231}' //Todo: this comes from the api response
+            //       ),
+            //     ),
+            //   );
+            // })
           ],
         ),
       ),

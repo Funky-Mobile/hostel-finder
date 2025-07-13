@@ -1,43 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hostel_finder/core/data/hostel_model.dart';
 
-class LikeHostelButton extends StatefulWidget {
+import '../../favorites/controllers/favorites_controller.dart';
 
+class LikeHostelButton extends StatelessWidget {
+  final HostelModel hostel;
   final Color? iconColor;
 
-  const LikeHostelButton({super.key, this.iconColor});
-
-  @override
-  State<LikeHostelButton> createState() => _LikeHostelButtonState();
-}
-
-class _LikeHostelButtonState extends State<LikeHostelButton> {
-
-
-  bool _hasLiked = false;
-
+  const LikeHostelButton({
+    super.key,
+    required this.hostel,
+    this.iconColor,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        onPressed: () {
-          //Todo: implement the favorites functionality
-          setState(() {
-            _hasLiked = !_hasLiked;
-          });
-        },
 
-        icon: _hasLiked
-          ? CircleAvatar(
-              backgroundColor: Colors.black.withValues(alpha: .025),
-              child: Icon(
-                Icons.favorite,
-                color: Colors.red
-              )
-          )
-          : Icon(
-            Icons.favorite_border_outlined,
-            color: widget.iconColor ?? Colors.black54,
+    final controller = Get.find<FavoritesController>();
+
+    return Obx(() {
+      final isFavorite = controller.isFavorite(hostel);
+
+      return IconButton(
+        onPressed: () => controller.toggleFavorite(hostel),
+        icon: isFavorite
+            ? CircleAvatar(
+          backgroundColor: Colors.black.withOpacity(0.05),
+          child: const Icon(Icons.favorite, color: Colors.red),
         )
-    );
+            : Icon(
+          Icons.favorite_border_outlined,
+          color: iconColor ?? Colors.black54,
+        ),
+      );
+    });
   }
 }

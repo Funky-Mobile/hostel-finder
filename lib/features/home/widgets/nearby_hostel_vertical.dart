@@ -1,60 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_finder/core/data/hostel_model.dart';
 import 'package:hostel_finder/features/home/widgets/like_hostel_button.dart';
-
 import '../../../shared/custom_app_labels/custom_app_header_text.dart';
 import 'app_hostel_location.dart';
 import 'app_hostel_ratings.dart';
 
 class NearbyHostelsVertical extends StatelessWidget {
+  final HostelModel hostel;
 
-  final String hostelImageUrl;
-  final String hostelName;
-  final String hostelLocation;
-  final double averageRating;
-  final String totalRating;
-
-  const NearbyHostelsVertical({super.key, required this.hostelImageUrl, required this.hostelName, required this.hostelLocation, required this.averageRating, required this.totalRating});
+  const NearbyHostelsVertical({super.key, required this.hostel});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              hostelImageUrl,
-              fit: BoxFit.cover,
-            ),
+        // Hostel Image
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            hostel.photos.isNotEmpty ? hostel.photos.first : '',
+            width: MediaQuery.of(context).size.width,
+            height: 200,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
           ),
         ),
 
+        const SizedBox(height: 8),
+
+        // Hostel Name
         CustomAppHeaderText(
-            text: hostelName,
-            size: 24,
-            maxLines: 1
+          text: hostel.name,
+          size: 24,
+          maxLines: 1,
         ),
 
+        // Location, Rating & Like Button
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: AppHostelLocation(location: hostelLocation, color: Colors.black),
+                AppHostelLocation(
+                  location: hostel.location,
+                  color: Colors.black,
                 ),
-
-                AppHostelRatings(averageRating: averageRating, totalRating: '$totalRating Reviews')
+                const SizedBox(height: 4),
+                AppHostelRatings(
+                  averageRating: hostel.rating,
+                  totalRating: '${hostel.totalRatings} Reviews',
+                ),
               ],
             ),
 
-            LikeHostelButton(),
+            // Like button with hostel model
+            LikeHostelButton(hostel: hostel),
           ],
-        )
+        ),
       ],
     );
   }

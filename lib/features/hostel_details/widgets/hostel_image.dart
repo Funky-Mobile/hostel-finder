@@ -13,7 +13,7 @@ class HostelImage extends StatelessWidget {
           bottomLeft: Radius.circular(10),
           bottomRight: Radius.circular(10)
       ),
-      child: Image.asset(
+      child: Image.network(
         imageUrl,
         fit: BoxFit.cover,
         width: double.infinity,
