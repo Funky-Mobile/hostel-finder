@@ -6,35 +6,18 @@ import 'package:hostel_finder/shared/app_strings/custom_app_strings.dart';
 class LoginForm extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
 
-  const LoginForm({super.key, required this.formKey});
+  const LoginForm({super.key, required this.formKey, required this.emailController, required this.passwordController});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
-
-
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-
-  void _disposeTextEditingControllers() {
-    _emailController.dispose();
-    _passwordController.dispose();
-  }
-
-
-  @override
-  void dispose() {
-    _disposeTextEditingControllers();
-    super.dispose();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +29,16 @@ class _LoginFormState extends State<LoginForm> {
           AuthInputField(
             label: CustomAppStrings.emailString,
             hintText: CustomAppStrings.emailString.toLowerCase(),
-            controller: _emailController,
+            controller: widget.emailController,
             focusNode: _emailFocusNode,
-            nextFocusNode: _passwordFocusNode
+            nextFocusNode: _passwordFocusNode,
           ),
-
           AuthInputField(
             label: CustomAppStrings.passwordString,
             hintText: CustomAppStrings.passwordString.toLowerCase(),
-            controller: _passwordController,
-            focusNode: _passwordFocusNode
-          )
+            controller: widget.passwordController,
+            focusNode: _passwordFocusNode,
+          ),
         ],
       ),
     );

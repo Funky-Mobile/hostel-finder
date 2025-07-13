@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hostel_finder/core/app_routes.dart';
-import 'package:hostel_finder/core/custom_scaffold_body.dart';
-import 'package:hostel_finder/core/naviagtor/app_navigator.dart';
+import 'package:get/get.dart';
 import 'package:hostel_finder/features/auth/signup/widgets/signup_form.dart';
 import 'package:hostel_finder/features/auth/widgets/auth_button.dart';
+import 'package:hostel_finder/features/auth/widgets/auth_navigation_button.dart';
 import 'package:hostel_finder/features/auth/widgets/auth_screens_header.dart';
 import 'package:hostel_finder/shared/app_strings/custom_app_strings.dart';
+import 'package:hostel_finder/core/custom_scaffold_body.dart';
 import 'package:hostel_finder/utils/vertical_item_spacer.dart';
 
-import '../widgets/auth_navigation_button.dart';
+import '../controller/auth_controller.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -18,33 +18,41 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-
   final _formKey = GlobalKey<FormState>();
 
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final _authController = Get.find<AuthController>();
 
-
-  void _disposeTextEditingControllers() {
+  @override
+  void dispose() {
     _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-  }
-
-
-
-  @override
-  void dispose() {
-    _disposeTextEditingControllers();
     super.dispose();
   }
 
+  void _handleSignup() {
+    if (_formKey.currentState!.validate()) {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Oops! Your passwords do not match!")),
+        );
+        return;
+      }
 
-
+      _authController.signup(
+        context: context,
+        fullName: _fullNameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,40 +62,38 @@ class _SignupScreenState extends State<SignupScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-
-                AuthScreensHeader(heading: CustomAppStrings.signUpHeaderString, body: CustomAppStrings.signUpSubHeadingString),
-
+                AuthScreensHeader(
+                  heading: CustomAppStrings.signUpHeaderString,
+                  body: CustomAppStrings.signUpSubHeadingString,
+                ),
                 VerticalItemSpacer(
                   child: SignupForm(
                     formKey: _formKey,
                     fullNameController: _fullNameController,
                     emailController: _emailController,
                     passwordController: _passwordController,
-                    confirmPasswordController: _confirmPasswordController
+                    confirmPasswordController: _confirmPasswordController,
                   ),
                 ),
 
-                AuthButton(formKey: _formKey, buttonText: CustomAppStrings.signupButtonString, onPressed: () {
-                  if(_passwordController.text != _confirmPasswordController.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text("Oops! Your passwords do not match!")
-                        )
-                    );
-                  } else {
-                    //Todo: sign up user
-                    //Todo: navigate to home screen
-                    AppNavigator.popAllUntil(context, AppRoutes.homeScreen);
-                  }
-                }),
-
-                AuthNavigationButton(question: CustomAppStrings.alreadyHaveAccountString, routeName: CustomAppStrings.loginString, route: AppRoutes.loginScreen),
-
+                Obx(() => _authController.isLoading.value
+                    ? const CircularProgressIndicator()
+                    : AuthButton(
+                          formKey: _formKey,
+                          buttonText: CustomAppStrings.signupButtonString,
+                          onPressed: _handleSignup,
+                    )
+                ),
+                AuthNavigationButton(
+                  question: CustomAppStrings.alreadyHaveAccountString,
+                  routeName: CustomAppStrings.loginString,
+                  route: '/login',
+                ),
               ],
             ),
           ),
-        )
-      )
+        ),
+      ),
     );
   }
 }
