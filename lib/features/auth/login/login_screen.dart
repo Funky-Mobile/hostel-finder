@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/core/custom_scaffold_body.dart';
 import 'package:hostel_finder/features/auth/login/widgets/login_form.dart';
@@ -12,6 +13,9 @@ import 'package:hostel_finder/shared/custom_buttons/custom_elevated_icon_button.
 import 'package:hostel_finder/utils/vertical_item_spacer.dart';
 
 import '../../../core/naviagtor/app_navigator.dart';
+import 'package:get/get.dart';
+
+import '../controller/auth_controller.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -24,10 +28,31 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-
+  final _authController = Get.find<AuthController>();
 
   final _formKey = GlobalKey<FormState>();
 
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleLogin() {
+    if (_formKey.currentState!.validate()) {
+
+      _authController.login(
+        context: context,
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+    }
+  }
 
 
   @override
@@ -42,13 +67,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 AuthScreensHeader(heading: CustomAppStrings.loginHeaderString, body: CustomAppStrings.loginSubHeadingString),
 
-                VerticalItemSpacer(child: LoginForm(formKey: _formKey)),
+                VerticalItemSpacer(child: LoginForm(
+                  formKey: _formKey,
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                )),
 
-                AuthButton(formKey: _formKey, buttonText: CustomAppStrings.loginButtonString, onPressed: () {
-                  //Todo: log in user
-                  //Todo: navigate to home screen
-                  AppNavigator.popAllUntil(context, AppRoutes.homeScreen);
-                }),
+                Obx(() => _authController.isLoading.value
+                    ? const CircularProgressIndicator()
+                    : AuthButton(
+                  formKey: _formKey,
+                  buttonText: CustomAppStrings.loginButtonString,
+                  onPressed: _handleLogin,
+                )),
 
                 AuthNavigationButton(question: CustomAppStrings.donNotHaveAccountString, routeName: CustomAppStrings.registerString, route: AppRoutes.signUpScreen),
 
@@ -63,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: CustomElevatedIconButton(
                         assetIcon: AppAssets.googleIcon,
                         buttonText: CustomAppStrings.continueWithGoogleString,
-                        onPressed: () {  }
+                        onPressed: () { _authController.loginWithGoogle(context); }
                       ),
                     ),
                   ],

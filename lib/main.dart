@@ -1,4 +1,5 @@
 
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,17 +11,23 @@ import 'package:google_place/google_place.dart';
 import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/firebase_options.dart';
 
+import 'features/auth/controller/auth_controller.dart';
 import 'features/favorites/controllers/favorites_controller.dart';
-import 'features/home/widgets/nearby_hostels.dart';
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.playIntegrity
+  );
+
   await dotenv.load();
 
   Get.put(FavoritesController());
+  Get.put(AuthController());
 
   runApp(const MyApp());
   // runApp(const MaterialApp(
