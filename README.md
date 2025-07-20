@@ -26,4 +26,4 @@
    git clone https://github.com/Funky-Mobile/hostel-finder.git
    cd hostel-finder
 
-   Now you're good to go 😉 
+**Now you're good to go 😉**
