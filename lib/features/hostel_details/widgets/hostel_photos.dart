@@ -74,7 +74,7 @@ class HostelPhotos extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.black.withValues(alpha: .3),
       isScrollControlled: true,
       useSafeArea: true,
       shape: const RoundedRectangleBorder(

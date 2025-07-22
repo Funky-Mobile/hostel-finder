@@ -67,12 +67,6 @@ class PopularHostels extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomAppHeaderText(
-          text: CustomAppStrings.popularHostelsString,
-          size: 24,
-          textColor: Colors.white,
-        ),
-
         /// ---- Horizontal List for Top Hostels ----
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -152,7 +146,7 @@ class PopularHostels extends StatelessWidget {
 
         /// ---- View All Button ----
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 4.0, left: 8.0),
           child: ViewAllHostelsButton(
             onPressed: () {
               Navigator.of(context).push(
@@ -174,18 +168,15 @@ class PopularHostels extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => HostelDetail(hostel: snapshot.data!),
-                          ),
-                        );
-                      },
-                      child: NearbyHostels(hostel: snapshot.data!),
-                    ),
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => HostelDetail(hostel: snapshot.data!),
+                        ),
+                      );
+                    },
+                    child: NearbyHostels(hostel: snapshot.data!),
                   );
                 } else {
                   return const Padding(

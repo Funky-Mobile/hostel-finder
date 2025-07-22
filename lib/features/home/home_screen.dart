@@ -4,7 +4,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:hostel_finder/core/custom_scaffold_body.dart';
+import 'package:hostel_finder/core/premium_scaffold.dart';
 import 'package:hostel_finder/features/all_hostels/all_hostels.dart';
+import 'package:hostel_finder/features/home/widgets/app_hostel_location.dart';
 import 'package:hostel_finder/features/home/widgets/popular_hostels.dart';
 import 'package:hostel_finder/features/home/widgets/salutation.dart';
 import 'package:hostel_finder/shared/app_strings/custom_app_strings.dart';
@@ -90,34 +92,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScaffoldBody(
+      body: PremiumScaffold(
+        showSearchBar: true,
+        onSearchTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (builder) => AllHostels(
+              headerString: CustomAppStrings.recentSearchString,
+            ),
+          ),
+        ),
+        leading: const AppHostelLocation(location: "Adenta Municipality", color: Colors.white54),
+
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Salutation(),
-
-              StickyHeader(
-                header: VerticalItemSpacer(
-                  space: MediaQuery.of(context).size.height * .025,
-                  child: CustomAppSearchBar(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (builder) => AllHostels(
-                          headerString: CustomAppStrings.recentSearchString,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                content: _hostelResults.isEmpty
-                    ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 40.0),
-                        child: CircularProgressIndicator(),
-                      ))
-                    : PopularHostels(hostels: _hostelResults),
-              ),
+              _hostelResults.isEmpty
+                  ? const Center(child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40.0),
+                    child: CircularProgressIndicator(),
+                  ))
+                  : PopularHostels(hostels: _hostelResults),
             ],
           ),
         ),
