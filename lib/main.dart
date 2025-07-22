@@ -45,8 +45,8 @@ class MyApp extends StatelessWidget {
         fontFamily: "Montserrat",
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
       ),
-      // initialRoute: AppRoutes.loginScreen,
-      initialRoute: AppRoutes.homeScreen,
+      initialRoute: AppRoutes.loginScreen,
+      // initialRoute: AppRoutes.homeScreen,
       routes: AppRoutes.routes,
     );
   }
