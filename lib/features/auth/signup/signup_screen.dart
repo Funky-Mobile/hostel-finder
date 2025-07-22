@@ -58,6 +58,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScaffoldBody(
+        useGlassmorphism: true,
         body: Center(
           child: SingleChildScrollView(
             child: Column(

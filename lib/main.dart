@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:hostel_finder/core/app_routes.dart';
-import 'package:hostel_finder/firebase_options.dart';
+// import 'package:hostel_finder/firebase_options.dart';
 
 import 'features/auth/controller/auth_controller.dart';
 import 'features/favorites/controllers/favorites_controller.dart';
@@ -18,7 +18,9 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+      // options: DefaultFirebaseOptions.currentPlatform
+  );
 
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.playIntegrity
@@ -30,9 +32,6 @@ void main() async {
   Get.put(AuthController());
 
   runApp(const MyApp());
-  // runApp(const MaterialApp(
-  //   home: MapHomeScreen(),
-  // ));
 }
 
 class MyApp extends StatelessWidget {
@@ -46,7 +45,8 @@ class MyApp extends StatelessWidget {
         fontFamily: "Montserrat",
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
       ),
-      initialRoute: AppRoutes.loginScreen,
+      // initialRoute: AppRoutes.loginScreen,
+      initialRoute: AppRoutes.homeScreen,
       routes: AppRoutes.routes,
     );
   }
@@ -168,41 +168,6 @@ class _MapHomeScreenState extends State<MapHomeScreen> {
               myLocationEnabled: true,
             ),
           ),
-          // Expanded(
-          //   flex: 1,
-          //   child: _hostelResults.isEmpty
-          //       ? const Center(child: Text("No hostels found."))
-          //       : ListView.builder(
-          //         itemCount: _hostelResults.length,
-          //         itemBuilder: (context, index) {
-          //           final place = _hostelResults[index];
-          //           final loc = place.geometry?.location;
-          //           final name = place.name ?? 'Unnamed Hostel';
-          //           final vicinity = place.vicinity ?? '';
-          //           final rating = place.rating ?? 3.5;
-          //           final totalRatings = place.userRatingsTotal ?? 0;
-          //
-          //           // Handle image
-          //           final hasPhoto = place.photos != null && place.photos!.isNotEmpty;
-          //           final photoRef = hasPhoto ? place.photos!.first.photoReference : null;
-          //           final imageUrl = hasPhoto
-          //               ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$photoRef&key=${dotenv.env['GOOGLE_API_KEY']}"
-          //               : "assets/images/default_hostel.jpg"; // fallback asset
-          //
-          //           return Padding(
-          //             padding: const EdgeInsets.only(bottom: 12.0),
-          //             child: NearbyHostels(
-          //               imageUrl,
-          //               name,
-          //               vicinity,
-          //               rating,
-          //               '$totalRatings',
-          //             ),
-          //           );
-          //     },
-          //   ),
-          // )
-
         ],
       ),
     );

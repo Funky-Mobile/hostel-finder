@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/core/custom_scaffold_body.dart';
 import 'package:hostel_finder/features/auth/login/widgets/login_form.dart';
@@ -12,7 +11,6 @@ import 'package:hostel_finder/shared/custom_app_labels/custom_app_header_text.da
 import 'package:hostel_finder/shared/custom_buttons/custom_elevated_icon_button.dart';
 import 'package:hostel_finder/utils/vertical_item_spacer.dart';
 
-import '../../../core/naviagtor/app_navigator.dart';
 import 'package:get/get.dart';
 
 import '../controller/auth_controller.dart';
@@ -59,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScaffoldBody(
+        useGlassmorphism: true,
         body: Center(
           child: SingleChildScrollView(
             child: Column(
