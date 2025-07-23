@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         lat: _currentPosition!.latitude,
         lng: _currentPosition!.longitude,
       ),
-      20000, // Slightly larger radius
+      100_000, // Slightly larger radius
       // keyword: "hostel",
       // Removed type: "lodging" to allow broader matches
     );
