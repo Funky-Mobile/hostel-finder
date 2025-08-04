@@ -1,8 +1,8 @@
-# 🏠 Hostel Finder App
+# 🏠 Hostel Finder App:
 
 **Hostel Finder** is a mobile application built with Flutter that helps students and individuals easily locate hostels near their schools or current location. Whether you're a university student looking for off-campus housing or someone relocating to a new area, Hostel Finder simplifies the process of finding safe, affordable, and convenient accommodations.
 
-## 📱 Features
+## 📱 Features:
 
 - 🔍 **Search Hostels:** Find hostels based on proximity to a selected school or your current location.
 - 🗺️ **Map Integration:** View hostels on an interactive map for better decision-making.
@@ -10,7 +10,7 @@
 - ❤️ **Favorites:** Save hostels to your favorites list for later viewing.
 - 🛎️ **Booking Inquiry:** Express interest or contact hostel managers directly through the app.
 
-## 🚀 Getting Started
+## 🚀 Getting Started:
 
 ### Prerequisites
 
