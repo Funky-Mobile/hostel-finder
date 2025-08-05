@@ -12,13 +12,13 @@
 
 ## 🚀 Getting Started:
 
-### Prerequisites
+### Prerequisites:
 
 - [Flutter SDK](https://flutter.dev/docs/get-started/install)
 - Android Studio / VS Code / Xcode
 - Emulator or real device
 
-### Installation
+### Installation:
 
 1. **Clone the repository:**
 
