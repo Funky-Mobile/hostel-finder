@@ -39,18 +39,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Montserrat",
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       initialRoute: AppRoutes.loginScreen,
-      // initialRoute: AppRoutes.homeScreen,
       routes: AppRoutes.routes,
     );
   }
 }
+
 
 class MapHomeScreen extends StatefulWidget {
   const MapHomeScreen({super.key});

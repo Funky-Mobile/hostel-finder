@@ -1,19 +1,26 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/core/naviagtor/app_navigator.dart';
 
+import '../../../core/app_urls/app_urls.dart';
+import '../dtos/signup_dto.dart';
+
 
 class AuthController extends GetxController {
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final RxBool isLoading = false.obs;
-
 
   Future<void> signup({
     required BuildContext context,
@@ -42,7 +49,7 @@ class AuthController extends GetxController {
       }
 
       if (context.mounted) {
-        AppNavigator.popAllUntil(context, AppRoutes.homeScreen);
+        AppNavigator.navigateTo(context, AppRoutes.homeScreen);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -71,40 +78,40 @@ class AuthController extends GetxController {
   }
 
 
-  Future<void> login({
-    required BuildContext context,
-    required String email,
-    required String password,
-  }) async {
-    isLoading.value = true;
-
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-
-      if (context.mounted) {
-        AppNavigator.popAllUntil(context, AppRoutes.homeScreen);
-      }
-    } on FirebaseAuthException catch (e) {
-      if (context.mounted) {
-        String message = switch (e.code) {
-          'user-not-found' => 'No user found for that email.',
-          'wrong-password' => 'Incorrect password.',
-          _ => e.message ?? 'Login failed'
-        };
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Unexpected error: $e")),
-        );
-      }
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  // Future<void> login({
+  //   required BuildContext context,
+  //   required String email,
+  //   required String password,
+  // }) async {
+  //   isLoading.value = true;
+  //
+  //   try {
+  //     await _auth.signInWithEmailAndPassword(email: email, password: password);
+  //
+  //     if (context.mounted) {
+  //       AppNavigator.popAllUntil(context, AppRoutes.homeScreen);
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     if (context.mounted) {
+  //       String message = switch (e.code) {
+  //         'user-not-found' => 'No user found for that email.',
+  //         'wrong-password' => 'Incorrect password.',
+  //         _ => e.message ?? 'Login failed'
+  //       };
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text(message)),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     if (context.mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text("Unexpected error: $e")),
+  //       );
+  //     }
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
 
   Future<void> loginWithGoogle(BuildContext context) async {
@@ -223,4 +230,128 @@ class AuthController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }}
+  }
+
+  /// Auth API requests
+
+  Future<void> login({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      final response = await http.post(
+        AppUrls.loginUrl,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "email": email,
+          "password": password,
+        }),
+      );
+
+      isLoading.value = false;
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          'Success',
+          'Login successful!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+        );
+
+        if (context.mounted) {
+          AppNavigator.navigateTo(context, AppRoutes.homeScreen);
+        }
+      } else {
+        Get.snackbar(
+          'Error',
+          'Login failed: ${jsonDecode(response.body)['message']}',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        'Login error: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+    }
+  }
+
+  Future<void> signUp(SignUpDto signUpDto, {required BuildContext context}) async {
+    try {
+      isLoading.value = true;
+
+      log('${signUpDto.toJson()}');
+
+      final response = await http.post(
+        AppUrls.signUpUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(signUpDto.toJson()),
+      );
+
+
+      isLoading.value = false;
+
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        Get.showSnackbar(
+          GetSnackBar(
+            title: 'Success',
+            message: 'Account created successfully!',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 3),
+            borderRadius: 10,
+            margin: EdgeInsets.all(16)
+          ),
+        );
+
+        if (context.mounted) {
+          AppNavigator.popAllUntil(context, AppRoutes.loginScreen);
+        }
+      } else {
+        Get.showSnackbar(
+          GetSnackBar(
+            title: 'Error',
+            message: 'Signup failed: ${jsonDecode(response.body)['message']}',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+            borderRadius: 10,
+            margin: EdgeInsets.all(16)
+          ),
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
+
+      log('$e');
+
+      Get.showSnackbar(
+        GetSnackBar(
+          title: 'Error',
+          message: 'Signup error: $e',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+          borderRadius: 10,
+          margin: EdgeInsets.all(16)
+        ),
+      );
+    }
+  }
+}

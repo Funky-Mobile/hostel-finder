@@ -1,6 +1,5 @@
 class CustomAppStrings {
-
-  //Authentication screen strings
+  // Authentication screen strings
   static String loginHeaderString = "Welcome Back!";
   static String loginSubHeadingString = "Login now to access amazing hostels made for only you!";
   static String loginButtonString = "Login";
@@ -17,13 +16,19 @@ class CustomAppStrings {
   static String signUpSubHeadingString = "Register now to access amazing hostels made for only you!";
   static String signupButtonString = "Sign Up";
 
+  static String studentIdString = "Student ID";
   static String fullNameString = "Full Name";
   static String emailString = "Email";
+  static String phoneString = "Phone Number";
+  static String dobString = "Date of Birth: yyyy-mm-dd";
+  static String genderString = "Gender";
+  static String facultyString = "Faculty";
+  static String guardianContactString = "Guardian Contact";
+  static String addressString = "Address";
   static String passwordString = "Password";
   static String confirmPasswordString = "Confirm Password";
 
-
-  //Home screen strings
+  // Home screen strings
   static String hiString = "Hi,";
   static String handWaveString = "👋";
   static String searchHostelString = "Search your hostel...";
@@ -32,13 +37,11 @@ class CustomAppStrings {
   static String nearbyHostelsString = "Nearby hostels";
   static String allRoomsString = "See all rooms";
 
-
-  //All hostels screen strings
+  // All hostels screen strings
   static String useMyLocationString = "or use my current location";
   static String recentSearchString = "Recent Search";
 
-
-  //Hostel details screen strings
+  // Hostel details screen strings
   static String overviewString = "Overview";
   static String photosString = "Photos";
   static String makeEnquiriesString = "Make Enquiries";
