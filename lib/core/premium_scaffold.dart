@@ -55,14 +55,18 @@ class PremiumScaffold extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF3B82F6).withOpacity(0.3),
+              color: const Color(0xFF3B82F6).withValues(alpha: 0.3),
               blurRadius: 15,
               offset: const Offset(0, 5),
             ),
           ],
         ),
       ),
-      leading: leading,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: leading,
+      ),
+      leadingWidth: MediaQuery.of(context).size.width * .6,
       title: title != null
           ? Text(
         title!,
@@ -94,45 +98,6 @@ class PremiumScaffold extends StatelessWidget {
         if (actions != null) ...actions!,
         const SizedBox(width: 8),
       ],
-    );
-  }
-}
-
-// Card-based content wrapper
-class ContentCard extends StatelessWidget {
-  final Widget child;
-  final EdgeInsets? padding;
-  final EdgeInsets? margin;
-
-  const ContentCard({
-    super.key,
-    required this.child,
-    this.padding,
-    this.margin,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: margin ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: padding ?? const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF1E40AF).withValues(alpha: 0.08),
-            blurRadius: 15,
-            offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: child,
     );
   }
 }

@@ -33,7 +33,7 @@ class HostelEnquiryButton extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => _showBottomModalSheet(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey,
+                backgroundColor: const Color(0xFF3B82F6),
                 padding: const EdgeInsets.all(16.0),
               ),
               child: CustomAppBodyText(

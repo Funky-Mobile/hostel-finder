@@ -26,7 +26,8 @@ class ViewAllHostelsButton extends StatelessWidget {
                 },
                 icon: Icons.keyboard_arrow_right_outlined,
                 buttonText: CustomAppStrings.allRoomsString,
-                buttonTextSize: 16
+                buttonTextSize: 16,
+                color: Colors.black,
             )
           ],
         )
@@ -41,7 +42,8 @@ class ViewAllHostelsButton extends StatelessWidget {
               },
               icon: Icons.keyboard_arrow_right_outlined,
               buttonText: CustomAppStrings.allRoomsString,
-              buttonTextSize: 16
+              buttonTextSize: 16,
+              color: Colors.black,
           )
         ],
       );
