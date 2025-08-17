@@ -246,6 +246,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_app_host:
+    dependency: "direct main"
+    description:
+      name: flutter_app_host
+      sha256: be86050aa84f2418c4e5380087281c126d56cdcb3b0679b217c99ce64b6211fc
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   flutter_dotenv:
     dependency: "direct main"
     description:

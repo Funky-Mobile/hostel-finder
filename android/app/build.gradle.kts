@@ -17,10 +17,20 @@ android {
         versionName = "1.0"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("my-release-key.jks")
+            storePassword = "HOSTEL-FINDER"
+            keyAlias = "hostel-finder-key-alias"
+            keyPassword = "HOSTEL-FINDER"
+        }
+    }
+
     buildTypes {
-        release {
-            isMinifyEnabled = false
-            isShrinkResources = false
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
