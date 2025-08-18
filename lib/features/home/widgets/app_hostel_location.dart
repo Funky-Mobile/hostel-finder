@@ -17,7 +17,7 @@ class AppHostelLocation extends StatelessWidget {
       children: [
         CustomAppIcon(icon: Icons.location_on_outlined, color: color ?? Colors.white),
         SizedBox(
-          width: MediaQuery.of(context).size.width * .5,
+          width: MediaQuery.of(context).size.width * .4,
           child: CustomAppBodyText(
             text: location,
             textColor: color ?? Colors.white,

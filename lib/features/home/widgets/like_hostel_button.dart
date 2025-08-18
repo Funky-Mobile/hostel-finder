@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hostel_finder/core/data/hostel_model.dart';
 
 import '../../favorites/controllers/favorites_controller.dart';
+import '../home_screen.dart';
 
-class LikeHostelButton extends StatelessWidget {
-  final HostelModel hostel;
+class LikeRoomButton extends StatelessWidget {
+  final RoomDao room;
   final Color? iconColor;
 
-  const LikeHostelButton({
+  const LikeRoomButton({
     super.key,
-    required this.hostel,
+    required this.room,
     this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
-
     final controller = Get.find<FavoritesController>();
 
     return Obx(() {
-      final isFavorite = controller.isFavorite(hostel);
+      final isFavorite = controller.isFavorite(room);
 
       return IconButton(
-        onPressed: () => controller.toggleFavorite(hostel),
+        onPressed: () => controller.toggleFavorite(room),
         icon: isFavorite
             ? CircleAvatar(
           backgroundColor: Colors.black.withOpacity(0.05),

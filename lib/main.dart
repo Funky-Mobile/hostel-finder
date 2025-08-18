@@ -1,4 +1,3 @@
-
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,21 +8,19 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:hostel_finder/core/app_routes.dart';
-// import 'package:hostel_finder/firebase_options.dart';
 
+import 'core/cache/token_cache_service.dart';
 import 'features/auth/controller/auth_controller.dart';
 import 'features/favorites/controllers/favorites_controller.dart';
 
-void main() async {
 
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp();
 
   await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity
+    androidProvider: AndroidProvider.playIntegrity,
   );
 
   await dotenv.load();
@@ -31,11 +28,17 @@ void main() async {
   Get.put(FavoritesController());
   Get.put(AuthController());
 
-  runApp(const MyApp());
+  // check for token
+  final token = await TokenCacheService.getToken();
+  final initialRoute =
+  token != null && token.isNotEmpty ? AppRoutes.homeScreen : AppRoutes.loginScreen;
+
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+  const MyApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "Montserrat",
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: AppRoutes.loginScreen,
+      initialRoute: initialRoute,
       routes: AppRoutes.routes,
     );
   }
