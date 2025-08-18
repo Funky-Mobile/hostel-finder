@@ -82,22 +82,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 AuthNavigationButton(question: CustomAppStrings.donNotHaveAccountString, routeName: CustomAppStrings.registerString, route: AppRoutes.signUpScreen),
 
-                VerticalItemSpacer(
-                  space: MediaQuery.of(context).size.height * .025,
-                  child: CustomAppHeaderText(text: CustomAppStrings.orString, fontWeight: FontWeight.bold),
-                ),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomElevatedIconButton(
-                        assetIcon: AppAssets.googleIcon,
-                        buttonText: CustomAppStrings.continueWithGoogleString,
-                        onPressed: () { _authController.loginWithGoogle(context); }
-                      ),
-                    ),
-                  ],
-                ),
+                // VerticalItemSpacer(
+                //   space: MediaQuery.of(context).size.height * .025,
+                //   child: CustomAppHeaderText(text: CustomAppStrings.orString, fontWeight: FontWeight.bold),
+                // ),
+                //
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: CustomElevatedIconButton(
+                //         assetIcon: AppAssets.googleIcon,
+                //         buttonText: CustomAppStrings.continueWithGoogleString,
+                //         onPressed: () { _authController.loginWithGoogle(context); }
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

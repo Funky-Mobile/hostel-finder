@@ -9,6 +9,9 @@ class HostelModel {
   final String overview;
   final List<ReviewModel> reviews;
   final String? phoneNumber;
+  double? distanceFromCampus;
+  int? availableRooms;
+  double? pricePerSemester;
 
   HostelModel({
     required this.id,
@@ -21,6 +24,9 @@ class HostelModel {
     required this.overview,
     required this.reviews,
     required this.phoneNumber,
+    this.distanceFromCampus,
+    this.availableRooms,
+    this.pricePerSemester
   });
 
   // ✅ JSON serialization (excluding reviews for favorites persistence)

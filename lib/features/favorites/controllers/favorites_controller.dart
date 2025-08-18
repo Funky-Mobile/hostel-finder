@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../core/data/hostel_model.dart';
+import '../../home/home_screen.dart';
 
 class FavoritesController extends GetxController {
-  static const String _favoritesKey = 'FAVORITE_HOSTELS';
+  static const String _favoritesKey = 'FAVORITE_ROOMS';
 
-  final RxList<HostelModel> _favorites = <HostelModel>[].obs;
-  List<HostelModel> get favorites => _favorites;
+  final RxList<RoomDao> _favorites = <RoomDao>[].obs;
+  List<RoomDao> get favorites => _favorites;
 
   @override
   void onInit() {
@@ -20,28 +20,28 @@ class FavoritesController extends GetxController {
     final List<String> saved = prefs.getStringList(_favoritesKey) ?? [];
 
     _favorites.assignAll(
-        saved.map((json) => HostelModel.fromJson(jsonDecode(json))).toList()
+      saved.map((json) => RoomDao.fromJson(jsonDecode(json))).toList(),
     );
   }
 
   Future<void> _saveFavorites() async {
     final prefs = await SharedPreferences.getInstance();
     final List<String> saved =
-    _favorites.map((hostel) => jsonEncode(hostel.toJson())).toList();
+    _favorites.map((room) => jsonEncode(room.toJson())).toList();
 
     await prefs.setStringList(_favoritesKey, saved);
   }
 
-  void toggleFavorite(HostelModel hostel) {
-    if (isFavorite(hostel)) {
-      _favorites.removeWhere((h) => h.id == hostel.id);
+  void toggleFavorite(RoomDao room) {
+    if (isFavorite(room)) {
+      _favorites.removeWhere((r) => r.id == room.id);
     } else {
-      _favorites.add(hostel);
+      _favorites.add(room);
     }
     _saveFavorites();
   }
 
-  bool isFavorite(HostelModel hostel) {
-    return _favorites.any((h) => h.id == hostel.id);
+  bool isFavorite(RoomDao room) {
+    return _favorites.any((r) => r.id == room.id);
   }
 }

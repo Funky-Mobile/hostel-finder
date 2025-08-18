@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../utils/vertical_item_spacer.dart';
 import '../../home/widgets/nearby_hostels.dart';
-import '../../hostel_details/hostel_detail.dart';
+import '../../hostel_details/room_detail.dart';
 
 class AllNearbyHostels extends StatefulWidget {
 

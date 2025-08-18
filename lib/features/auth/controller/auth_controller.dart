@@ -12,6 +12,7 @@ import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/core/naviagtor/app_navigator.dart';
 
 import '../../../core/app_urls/app_urls.dart';
+import '../../../core/cache/token_cache_service.dart';
 import '../dtos/signup_dto.dart';
 
 
@@ -254,6 +255,14 @@ class AuthController extends GetxController {
       isLoading.value = false;
 
       if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        // Extract and save token
+        final token = responseData['data'];
+        if (token != null) {
+          await TokenCacheService.saveToken(token);
+        }
+
         Get.snackbar(
           'Success',
           'Login successful!',
@@ -264,12 +273,13 @@ class AuthController extends GetxController {
         );
 
         if (context.mounted) {
-          AppNavigator.navigateTo(context, AppRoutes.homeScreen);
+          AppNavigator.popAllUntil(context, AppRoutes.homeScreen);
         }
       } else {
+        final errorMessage = jsonDecode(response.body)['message'] ?? 'Unknown error';
         Get.snackbar(
           'Error',
-          'Login failed: ${jsonDecode(response.body)['message']}',
+          'Login failed: $errorMessage',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white,
@@ -288,6 +298,9 @@ class AuthController extends GetxController {
       );
     }
   }
+
+
+
 
   Future<void> signUp(SignUpDto signUpDto, {required BuildContext context}) async {
     try {
