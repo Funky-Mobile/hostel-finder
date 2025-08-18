@@ -28,8 +28,6 @@
     <string>This app needs access to your location to show nearby hostels.</string>
     <key>io.flutter.embedded_views_preview</key>
     <true/>
-    <key>GMSApiKey</key>
-    <string></string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
