@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../home/home_screen.dart';
+import '../../room/dao/room_dao.dart';
 
 class FavoritesController extends GetxController {
   static const String _favoritesKey = 'FAVORITE_ROOMS';

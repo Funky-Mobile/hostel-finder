@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../favorites/controllers/favorites_controller.dart';
+import '../../room/dao/room_dao.dart';
 import '../home_screen.dart';
 
 class LikeRoomButton extends StatelessWidget {

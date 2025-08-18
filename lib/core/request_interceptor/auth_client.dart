@@ -14,6 +14,7 @@ class AuthClient extends http.BaseClient {
     if (token != null && token.isNotEmpty) {
       request.headers['Authorization'] = 'Bearer $token';
       request.headers['Content-type'] = 'application/json';
+      request.headers['Accept'] = '*/*';
     }
 
     return _inner.send(request);

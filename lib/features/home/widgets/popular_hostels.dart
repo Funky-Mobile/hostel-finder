@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hostel_finder/features/all_hostels/all_hostels.dart';
+import 'package:hostel_finder/features/all_hostels/all_rooms_screen.dart';
 import 'package:hostel_finder/features/home/widgets/nearby_hostels.dart';
 import 'package:hostel_finder/features/home/widgets/popular_hostel_card.dart';
 import 'package:hostel_finder/features/home/widgets/view_all_hostels_button.dart';
-import 'package:hostel_finder/features/hostel_details/room_detail.dart';
 import 'package:hostel_finder/shared/app_strings/custom_app_strings.dart';
 
-import '../home_screen.dart';
+import '../../room/dao/room_dao.dart';
+import '../../room/room_details/room_detail.dart';
+
 
 class PopularHostels extends StatelessWidget {
   final List<RoomDao> hostelResults;
@@ -61,7 +62,7 @@ class PopularHostels extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => AllHostels(
+                  builder: (_) => AllRoomsScreen(
                     headerString: CustomAppStrings.nearbyHostelsString,
                   ),
                 ),

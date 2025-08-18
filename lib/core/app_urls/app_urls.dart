@@ -8,4 +8,10 @@ class AppUrls {
 
   static Uri get signUpUrl => Uri.parse('$_baseUrl/students/new');
 
+  static Uri get findAllRoomsUrl => Uri.parse('$_baseUrl/rooms');
+
+  static Uri findUserByEmailUrl(String email) => Uri.parse('$_baseUrl/students/find?email=$email');
+
+  static Uri requestMaintenanceUrl(String studentId) => Uri.parse('$_baseUrl/maintenance/$studentId/request');
+
 }

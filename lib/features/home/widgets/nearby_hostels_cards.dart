@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hostel_finder/core/data/hostel_model.dart';
 import '../../../shared/custom_app_labels/custom_app_body_text.dart';
 import '../../../shared/custom_app_labels/custom_app_header_text.dart';
+import '../../room/dao/room_dao.dart';
 import '../home_screen.dart';
 
 class RoomCardHorizontal extends StatelessWidget {

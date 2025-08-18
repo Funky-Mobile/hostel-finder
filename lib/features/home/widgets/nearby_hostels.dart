@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hostel_finder/features/home/widgets/nearby_hostels_cards.dart';
 import '../../../utils/app_device.dart';
+import '../../room/dao/room_dao.dart';
 import '../home_screen.dart';
 
 class NearbyHostels extends StatelessWidget {

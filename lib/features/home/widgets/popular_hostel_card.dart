@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hostel_finder/features/home/widgets/hostel_amenities.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_header_text.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_body_text.dart';
+import '../../room/dao/room_dao.dart';
 
-import '../home_screen.dart';
 
 class PopularHostelCard extends StatelessWidget {
   final RoomDao hostel;
@@ -104,7 +104,7 @@ class PopularHostelCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: CustomAppBodyText(
-                      text: '₵${hostel.price.toStringAsFixed(0)}/month',
+                      text: 'GHS${hostel.price.toStringAsFixed(0)}/Semester',
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       textColor: const Color(0xFF059669),

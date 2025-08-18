@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../hostel_details/room_detail.dart';
+import '../room/room_details/room_detail.dart';
 import 'controllers/favorites_controller.dart';
 
 class FavoritesScreen extends StatelessWidget {

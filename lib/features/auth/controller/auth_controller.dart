@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hostel_finder/core/jwt_token/jwt_decoder.dart';
+import 'package:hostel_finder/core/user/user_view_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hostel_finder/core/app_routes.dart';
@@ -20,6 +22,7 @@ class AuthController extends GetxController {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final UserViewModel _userViewModel = Get.put(UserViewModel());
 
   final RxBool isLoading = false.obs;
 
@@ -249,7 +252,7 @@ class AuthController extends GetxController {
         body: jsonEncode({
           "email": email,
           "password": password,
-        }),
+        })
       );
 
       isLoading.value = false;
@@ -262,6 +265,13 @@ class AuthController extends GetxController {
         if (token != null) {
           await TokenCacheService.saveToken(token);
         }
+
+        DecodedJWTToken decodedJWTToken = await JWTDecoder.decodedJWTToken();
+
+
+        log("DECODED TOKEN: ${decodedJWTToken}");
+
+        await _userViewModel.fetchUserByEmail(decodedJWTToken.sub);
 
         Get.snackbar(
           'Success',
