@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hostel_finder/core/app_routes.dart';
+import 'package:hostel_finder/core/cache/user_cache_service.dart';
 import 'package:hostel_finder/core/naviagtor/app_navigator.dart';
-import 'package:hostel_finder/core/user/user_view_model.dart';
+import 'package:hostel_finder/core/user/user_model.dart';
 import 'package:hostel_finder/features/all_hostels/all_rooms_screen.dart';
 import 'package:hostel_finder/features/bookings/booking_history.dart';
 import 'package:hostel_finder/features/home/widgets/popular_hostels.dart';
+import 'package:hostel_finder/features/maintenance/mainteneance_request_screen.dart';
 import 'package:hostel_finder/features/room/room_view_model/room_view_model.dart';
 import 'package:hostel_finder/shared/app_strings/custom_app_strings.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_header_text.dart';
@@ -26,10 +29,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   final RoomViewModel _roomViewModel = Get.put(RoomViewModel());
   final controller = Get.find<FavoritesController>();
-  final UserViewModel _userViewModel = Get.find<UserViewModel>();
+
 
   late AnimationController _fadeController;
   late AnimationController _slideController;
+
+  final UserCacheService userCacheService = UserCacheService();
+  late User user;
 
 
   @override
@@ -56,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _loadInitDataRooms() {
+  void _loadInitDataRooms() async {
+    user = (await UserCacheService.getUser())!;
     _fadeController.forward();
     _slideController.forward();
   }
@@ -77,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=3'), // replace with user image
               ),
               accountName: Text(
-                _userViewModel.user.value!.fullName,
+                user.fullName,
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -85,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
               accountEmail: Text(
-                _userViewModel.user.value!.email,
+                user.email,
                 style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
               ),
             ),
@@ -101,12 +108,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     color: Colors.blue,
                     widget: BookingHistory()
                   ),
-                  // _buildDrawerItem(
-                  //   icon: Icons.card_giftcard,
-                  //   title: 'Rewards',
-                  //   badgeCount: 2,
-                  //   color: Colors.red,
-                  // ),
+                  _buildDrawerItem(
+                    icon: CupertinoIcons.hammer,
+                    title: 'Maintenance requests',
+                    // badgeCount: 2,
+                    color: Colors.red,
+                    widget: MaintenanceRequestsScreen()
+                  ),
                   // _buildDrawerItem(
                   //   icon: Icons.location_on,
                   //   title: 'Address',

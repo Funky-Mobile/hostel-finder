@@ -13,5 +13,6 @@ class AppUrls {
   static Uri findUserByEmailUrl(String email) => Uri.parse('$_baseUrl/students/find?email=$email');
 
   static Uri requestMaintenanceUrl(String studentId) => Uri.parse('$_baseUrl/maintenance/$studentId/request');
+  static Uri fetchUserMaintenanceRequestsUrl(String studentId) => Uri.parse('$_baseUrl/maintenance/$studentId');
 
 }

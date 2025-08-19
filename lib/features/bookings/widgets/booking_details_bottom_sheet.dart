@@ -7,13 +7,17 @@ import '../daos/booking_dao.dart';
 import 'package:get/get.dart';
 
 
-class BookingDetailsBottomSheet extends StatelessWidget {
+class BookingDetailsBottomSheet extends StatefulWidget {
   final BookingDao booking;
 
   BookingDetailsBottomSheet({super.key, required this.booking});
 
-  final MaintenanceViewModel _maintenanceViewModel = Get.put(MaintenanceViewModel());
+  @override
+  State<BookingDetailsBottomSheet> createState() => _BookingDetailsBottomSheetState();
+}
 
+class _BookingDetailsBottomSheetState extends State<BookingDetailsBottomSheet> {
+  final MaintenanceViewModel _maintenanceViewModel = Get.put(MaintenanceViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -70,38 +74,38 @@ class BookingDetailsBottomSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildDetailSection('Room Information', [
-                    _buildDetailRow('Room Number', booking.roomNumber),
-                    _buildDetailRow('Room Type', booking.roomType),
-                    _buildDetailRow('Capacity', '${booking.capacity} ${booking.capacity == 1 ? 'person' : 'people'}'),
-                    _buildDetailRow('Gender', booking.gender),
+                    _buildDetailRow('Room Number', widget.booking.roomNumber),
+                    _buildDetailRow('Room Type', widget.booking.roomType),
+                    _buildDetailRow('Capacity', '${widget.booking.capacity} ${widget.booking.capacity == 1 ? 'person' : 'people'}'),
+                    _buildDetailRow('Gender', widget.booking.gender),
                   ]),
 
                   _buildDetailSection('Customer Information', [
-                    _buildDetailRow('Name', booking.customerName),
-                    _buildDetailRow('Email', booking.customerEmail),
+                    _buildDetailRow('Name', widget.booking.customerName),
+                    _buildDetailRow('Email', widget.booking.customerEmail),
                   ]),
 
                   _buildDetailSection('Booking Information', [
-                    _buildDetailRow('Check-in', DateFormat('EEEE, MMM dd, yyyy').format(booking.checkInDate)),
-                    _buildDetailRow('Check-out', DateFormat('EEEE, MMM dd, yyyy').format(booking.checkOutDate)),
-                    _buildDetailRow('Duration', '${booking.durationInDays} ${booking.durationInDays == 1 ? 'night' : 'nights'}'),
-                    _buildDetailRow('Booking Date', DateFormat('MMM dd, yyyy - hh:mm a').format(booking.bookingDate)),
+                    _buildDetailRow('Check-in', DateFormat('EEEE, MMM dd, yyyy').format(widget.booking.checkInDate)),
+                    _buildDetailRow('Check-out', DateFormat('EEEE, MMM dd, yyyy').format(widget.booking.checkOutDate)),
+                    _buildDetailRow('Duration', '${widget.booking.durationInDays} ${widget.booking.durationInDays == 1 ? 'night' : 'nights'}'),
+                    _buildDetailRow('Booking Date', DateFormat('MMM dd, yyyy - hh:mm a').format(widget.booking.bookingDate)),
                   ]),
 
                   _buildDetailSection('Payment Information', [
-                    _buildDetailRow('Total Amount', '\$${booking.totalAmount.toStringAsFixed(2)}'),
-                    _buildDetailRow('Payment Status', booking.paymentStatus),
-                    _buildDetailRow('Booking Status', booking.bookingStatus),
+                    _buildDetailRow('Total Amount', '\$${widget.booking.totalAmount.toStringAsFixed(2)}'),
+                    _buildDetailRow('Payment Status', widget.booking.paymentStatus),
+                    _buildDetailRow('Booking Status', widget.booking.bookingStatus),
                   ]),
 
-                  if (booking.amenities.isNotEmpty)
+                  if (widget.booking.amenities.isNotEmpty)
                     _buildDetailSection('Amenities', [
                       Container(
                         width: double.infinity,
                         child: Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: booking.amenities.map((amenity) {
+                          children: widget.booking.amenities.map((amenity) {
                             return Container(
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
@@ -123,7 +127,7 @@ class BookingDetailsBottomSheet extends StatelessWidget {
                       ),
                     ]),
 
-                  if (booking.specialRequests != null && booking.specialRequests!.isNotEmpty)
+                  if (widget.booking.specialRequests != null && widget.booking.specialRequests!.isNotEmpty)
                     _buildDetailSection('Special Requests', [
                       Container(
                         width: double.infinity,
@@ -134,7 +138,7 @@ class BookingDetailsBottomSheet extends StatelessWidget {
                           border: Border.all(color: Colors.grey[200]!),
                         ),
                         child: Text(
-                          booking.specialRequests!,
+                          widget.booking.specialRequests!,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[700],
@@ -153,7 +157,7 @@ class BookingDetailsBottomSheet extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  _showMaintenanceRequestDialog(context, booking.roomId);
+                  _showMaintenanceRequestDialog(context, widget.booking.roomId);
                 },
                 child: Text('Request Maintenance'),
               ),
@@ -191,8 +195,10 @@ class BookingDetailsBottomSheet extends StatelessWidget {
                 await _maintenanceViewModel.requestMaintenance(roomId, descriptionController.text);
 
                 if(context.mounted) {
-                  Navigator.pop(context);
-                  Get.snackbar('Success', 'Maintenance request submitted');
+                  setState(() {
+                    Navigator.pop(context);
+                    Get.snackbar('Success', 'Maintenance request submitted');
+                  });
                 }
               },
               child: Text('Submit'),
