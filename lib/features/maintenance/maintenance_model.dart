@@ -19,8 +19,6 @@ class MaintenanceModel {
 
   /// Creates a MaintenanceModel object from JSON
   factory MaintenanceModel.fromJson(Map<String, dynamic> json) {
-    print("🔧 PARSING MAINTENANCE MODEL FROM: $json");
-
     try {
       final model = MaintenanceModel(
         id: json['id']?.toString() ?? '',
@@ -40,12 +38,17 @@ class MaintenanceModel {
             : DateTime.now()),
       );
 
-      print("✅ SUCCESSFULLY CREATED MODEL: $model");
       return model;
 
     } catch (e) {
-      print("❌ ERROR IN fromJson: $e");
-      print("🔍 INPUT JSON: $json");
       rethrow;
     }
-}}
+
+
+}
+
+  @override
+  String toString() {
+    return 'MaintenanceModel{id: $id, studentId: $studentId, roomId: $roomId, description: $description, status: $status, createdAt: $createdAt, updatedAt: $updatedAt}';
+  }
+}

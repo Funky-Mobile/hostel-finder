@@ -9,12 +9,14 @@ class PopularHostelCard extends StatelessWidget {
   final RoomDao hostel;
   final VoidCallback? onViewDetails;
   final VoidCallback? onBookNow;
+  final bool isBooking;
 
   const PopularHostelCard({
     super.key,
     required this.hostel,
     this.onViewDetails,
     this.onBookNow,
+    required this.isBooking,
   });
 
   @override
@@ -198,26 +200,47 @@ class PopularHostelCard extends StatelessWidget {
                           ),
                         ),
                       ),
+
                       const SizedBox(width: 12),
+
                       Expanded(
-                        flex: 2,
-                        child: ElevatedButton.icon(
-                          onPressed: hostel.status == 'available'
-                              ? onBookNow
-                              : null,
-                          icon: const Icon(Icons.calendar_today, size: 18),
-                          label: const CustomAppBodyText(
-                            text: 'Book Now',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            textColor: Colors.white,
+                        child: SizedBox(
+                          width: 80,
+                          child: ElevatedButton(
+                            onPressed: hostel.status == "available" && !isBooking
+                                ? onBookNow
+                                : null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              disabledBackgroundColor: Colors.grey[300],
+                              disabledForegroundColor: Colors.grey[600],
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: isBooking
+                                ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                                : Text(
+                              hostel.status == "available" ? 'Book' : 'N/A',
+                              style: const TextStyle(fontSize: 12),
+                            ),
                           ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF3B82F6),
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                      ),
+                        )
+                      )
                     ],
                   ),
                 ],

@@ -1,6 +1,7 @@
 class RoomDao {
   final String id;
   final String number;
+  final String hostelName;
   final String type;
   final int capacity;
   final double price;
@@ -13,6 +14,7 @@ class RoomDao {
   RoomDao({
     required this.id,
     required this.number,
+    required this.hostelName,
     required this.type,
     required this.capacity,
     required this.price,
@@ -27,6 +29,7 @@ class RoomDao {
     return RoomDao(
       id: json['id'],
       number: json['number'],
+      hostelName: json['hostelName'],
       type: json['type'],
       capacity: json['capacity'],
       price: (json['price'] as num).toDouble(),
@@ -42,6 +45,7 @@ class RoomDao {
     return {
       'id': id,
       'number': number,
+      'hostelName': hostelName,
       'type': type,
       'capacity': capacity,
       'price': price,

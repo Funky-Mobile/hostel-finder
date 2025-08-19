@@ -15,7 +15,7 @@ class BookingHistory extends StatefulWidget {
 
 class _BookingHistoryState extends State<BookingHistory> {
 
-  final BookingHistoryViewModel controller = Get.put(BookingHistoryViewModel());
+  final BookingViewModel controller = Get.put(BookingViewModel());
   final TextEditingController searchController = TextEditingController();
 
   @override

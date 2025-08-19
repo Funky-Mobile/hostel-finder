@@ -2,6 +2,7 @@ class BookingDao {
   final String id;
   final String roomId;
   final String roomNumber;
+  final String hostelName;
   final String roomType;
   final String customerName;
   final String customerEmail;
@@ -20,6 +21,7 @@ class BookingDao {
     required this.roomId,
     required this.id,
     required this.roomNumber,
+    required this.hostelName,
     required this.roomType,
     required this.customerName,
     required this.customerEmail,
@@ -40,6 +42,7 @@ class BookingDao {
       id: json['id'],
       roomId: json['roomId'],
       roomNumber: json['roomNumber'],
+      hostelName: json['hostelName'],
       roomType: json['roomType'],
       customerName: json['customerName'],
       customerEmail: json['customerEmail'],
@@ -79,6 +82,6 @@ class BookingDao {
 
   @override
   String toString() {
-    return 'BookingDao{id: $id, roomId: $roomId, roomNumber: $roomNumber, roomType: $roomType, customerName: $customerName, customerEmail: $customerEmail, checkInDate: $checkInDate, checkOutDate: $checkOutDate, totalAmount: $totalAmount, paymentStatus: $paymentStatus, bookingStatus: $bookingStatus, bookingDate: $bookingDate, amenities: $amenities, gender: $gender, capacity: $capacity, specialRequests: $specialRequests}';
+    return 'BookingDao{id: $id, roomId: $roomId, roomNumber: $roomNumber, roomType: $roomType, hostelName: $hostelName customerName: $customerName, customerEmail: $customerEmail, checkInDate: $checkInDate, checkOutDate: $checkOutDate, totalAmount: $totalAmount, paymentStatus: $paymentStatus, bookingStatus: $bookingStatus, bookingDate: $bookingDate, amenities: $amenities, gender: $gender, capacity: $capacity, specialRequests: $specialRequests}';
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hostel_finder/features/all_hostels/all_rooms_screen.dart';
+import 'package:hostel_finder/features/bookings/booking_helper.dart';
 import 'package:hostel_finder/features/home/widgets/nearby_hostels.dart';
 import 'package:hostel_finder/features/home/widgets/popular_hostel_card.dart';
 import 'package:hostel_finder/features/home/widgets/view_all_hostels_button.dart';
@@ -8,8 +9,7 @@ import 'package:hostel_finder/shared/app_strings/custom_app_strings.dart';
 import '../../room/dao/room_dao.dart';
 import '../../room/room_details/room_detail.dart';
 
-
-class PopularHostels extends StatelessWidget {
+class PopularHostels extends StatefulWidget {
   final List<RoomDao> hostelResults;
 
   const PopularHostels({
@@ -18,9 +18,16 @@ class PopularHostels extends StatelessWidget {
   });
 
   @override
+  State<PopularHostels> createState() => _PopularHostelsState();
+}
+
+class _PopularHostelsState extends State<PopularHostels> {
+  Set<String> bookingRooms = <String>{}; // Track which rooms are being booked
+
+  @override
   Widget build(BuildContext context) {
     // Show only the top 3 as popular
-    final popular = hostelResults.take(3).toList();
+    final popular = widget.hostelResults.take(3).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,6 +41,7 @@ class PopularHostels extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: PopularHostelCard(
                   hostel: room,
+                  isBooking: bookingRooms.contains(room.id),
                   onViewDetails: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -41,14 +49,7 @@ class PopularHostels extends StatelessWidget {
                       ),
                     );
                   },
-                  onBookNow: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Booking room ${room.number}...'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  },
+                  onBookNow: () => BookingHelper.handleBooking(context, room)
                 ),
               );
             }).toList(),
@@ -73,7 +74,7 @@ class PopularHostels extends StatelessWidget {
 
         /// ---- Nearby Hostels (Vertical List) ----
         Column(
-          children: hostelResults.map((room) {
+          children: widget.hostelResults.map((room) {
             return InkWell(
               onTap: () {
                 Navigator.of(context).push(

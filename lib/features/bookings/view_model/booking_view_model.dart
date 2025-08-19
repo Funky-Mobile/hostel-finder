@@ -1,9 +1,15 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:get/get.dart';
+import 'package:hostel_finder/core/app_urls/app_urls.dart';
+import 'package:hostel_finder/core/cache/user_cache_service.dart';
+import 'package:hostel_finder/core/request_interceptor/auth_client.dart';
+import 'package:hostel_finder/core/user/user_model.dart';
 
 import '../daos/booking_dao.dart';
+import '../dtos/create_booking_request.dart';
 
-class BookingHistoryViewModel extends GetxController {
+class BookingViewModel extends GetxController {
   var bookings = <BookingDao>[].obs;
   var filteredBookings = <BookingDao>[].obs;
   var selectedFilter = 'All'.obs;
@@ -37,54 +43,68 @@ class BookingHistoryViewModel extends GetxController {
     debounce(searchQuery, (_) => filterBookings(), time: Duration(milliseconds: 300));
   }
 
+
+  Future<bool> createBooking({
+    required String roomId  ,
+    required double amount
+  }) async {
+    try {
+      isLoading.value = true;
+
+      User? user = await UserCacheService.getUser();
+
+      final bookingRequest = CreateBookingRequest(
+        studentId: user!.id,
+        roomId: roomId,
+        checkInDate: DateTime.parse("2025-09-01T00:00:00"),
+        checkOutDate: DateTime.parse("2026-06-30T00:00:00"),
+        amountPaid: amount,
+      );
+
+      final client = AuthClient();
+      final response = await client.post(
+        AppUrls.createBookingUrl,
+        body: jsonEncode(bookingRequest.toJson()),
+      );
+
+      if (response.statusCode == 201) {
+        log("Booking created successfully");
+        fetchBookings();
+        return true;
+      } else {
+        log("Booking creation failed: ${response.body}");
+      }
+    } catch (e) {
+      log("Error creating booking: $e");
+    } finally {
+      isLoading.value = false;
+    }
+
+    return false;
+  }
+
+
+
   Future<void> fetchBookings() async {
     try {
       isLoading.value = true;
-      // Simulate API call - replace with actual API endpoint
-      await Future.delayed(Duration(seconds: 2));
 
-      // Mock data - replace with actual API call
-      final mockBookings = [
-        BookingDao(
-          id: '1',
-          roomNumber: 'A101',
-          roomType: 'Single',
-          customerName: 'John Doe',
-          customerEmail: 'john@example.com',
-          checkInDate: DateTime.now().subtract(Duration(days: 5)),
-          checkOutDate: DateTime.now().add(Duration(days: 2)),
-          totalAmount: 350.0,
-          paymentStatus: 'Paid',
-          bookingStatus: 'Active',
-          bookingDate: DateTime.now().subtract(Duration(days: 10)),
-          amenities: ['WiFi', 'AC', 'TV'],
-          gender: 'Male',
-          capacity: 1,
-          roomId: 'R100D',
-        ),
-        BookingDao(
-          id: '2',
-          roomNumber: 'B205',
-          roomType: 'Double',
-          customerName: 'Jane Smith',
-          customerEmail: 'jane@example.com',
-          checkInDate: DateTime.now().add(Duration(days: 3)),
-          checkOutDate: DateTime.now().add(Duration(days: 8)),
-          totalAmount: 750.0,
-          paymentStatus: 'Paid',
-          bookingStatus: 'Confirmed',
-          bookingDate: DateTime.now().subtract(Duration(days: 7)),
-          amenities: ['WiFi', 'AC', 'TV', 'Mini Fridge'],
-          gender: 'Female',
-          capacity: 2,
-          specialRequests: 'Ground floor room preferred',
-          roomId: 'R2DDE23',
-        ),
-        // Add more mock data as needed
-      ];
+      User? user = await UserCacheService.getUser();
 
-      bookings.assignAll(mockBookings);
-      filteredBookings.assignAll(mockBookings);
+      final client = AuthClient();
+      final response = await client.get(
+        AppUrls.findStudentBookingsUrl(user!.id)
+      );
+
+      if(response.statusCode == 200) {
+
+        final List<dynamic> jsonData = jsonDecode(response.body)['data'];
+        final fetchedBookings = BookingDao.listFromJson(jsonData);
+
+        bookings.assignAll(fetchedBookings);
+        filteredBookings.assignAll(fetchedBookings);
+      }
+
     } catch (e) {
       log('Error fetching bookings: $e');
     } finally {
