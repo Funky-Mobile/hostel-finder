@@ -27,17 +27,17 @@ class RoomDao {
 
   factory RoomDao.fromJson(Map<String, dynamic> json) {
     return RoomDao(
-      id: json['id'],
-      number: json['number'],
-      hostelName: json['hostelName'],
-      type: json['type'],
-      capacity: json['capacity'],
+      id: json['id'] ?? '',
+      number: json['number'] ?? '',
+      hostelName: json['hostelName'] ?? '',
+      type: json['type'] ?? '',
+      capacity: json['capacity'] ?? 0,
       price: (json['price'] as num).toDouble(),
       amenities: List<String>.from(json['amenities']),
-      status: json['status'],
-      description: json['description'],
+      status: json['status'] ?? '',
+      description: json['description'] ?? '',
       images: List<String>.from(json['images']),
-      gender: json['gender'],
+      gender: json['gender'] ?? '',
     );
   }
 
