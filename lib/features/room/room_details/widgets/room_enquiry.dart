@@ -361,20 +361,18 @@ class RoomEnquiry {
     // Show create roommate request dialog with pre-selected room
     final result = await showDialog(
       context: context,
-      builder: (context) => CreateRoommateRequestDialog(
-        preSelectedRoomId: room.id,
-        preSelectedRoomNumber: room.number,
-      ),
+      builder: (context) => CreateRoommateRequestDialog(room: room),
     );
 
     if (result != null) {
-      // TODO: Handle the roommate request creation
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Roommate request created successfully!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Roommate request created successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
     }
   }
 

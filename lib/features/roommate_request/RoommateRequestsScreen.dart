@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hostel_finder/features/roommate_request/widgets/CreateRoommateRequestDialog.dart';
-import 'package:hostel_finder/features/roommate_request/widgets/JoinRequestDialog.dart';
-
-import 'dtos/JoinRequestData.dart';
-import 'dtos/RoommateRequest.dart';
+import 'package:get/get.dart';
+import 'package:hostel_finder/features/room/dao/room_dao.dart';
+import 'package:hostel_finder/features/room/room_details/room_detail.dart';
+import 'package:hostel_finder/features/room/room_view_model/room_view_model.dart';
+import 'package:hostel_finder/features/roommate_request/dtos/RoommateRequest.dart';
+import 'package:hostel_finder/features/roommate_request/viewmodel/roommate_request_viewmodel.dart';
 
 class RoommateRequestsScreen extends StatefulWidget {
   const RoommateRequestsScreen({super.key});
@@ -13,17 +14,17 @@ class RoommateRequestsScreen extends StatefulWidget {
 }
 
 class _RoommateRequestsScreenState extends State<RoommateRequestsScreen> with TickerProviderStateMixin {
+
   late TabController _tabController;
-  List<RoommateRequest> allRequests = [];
-  List<RoommateRequest> myRequests = [];
-  List<RoommateRequest> joinedRequests = [];
-  bool isLoading = true;
+
+  final RoommateRequestViewmodel viewModel = Get.put(RoommateRequestViewmodel());
+
+  final RoomViewModel roomViewModel = Get.find<RoomViewModel>();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _loadData();
   }
 
   @override
@@ -32,187 +33,12 @@ class _RoommateRequestsScreenState extends State<RoommateRequestsScreen> with Ti
     super.dispose();
   }
 
-  Future<void> _loadData() async {
-    setState(() => isLoading = true);
-    try {
-      await Future.wait([
-        _loadAllRequests(),
-        _loadMyRequests(),
-        _loadJoinedRequests(),
-      ]);
-    } catch (e) {
-      _showErrorSnackbar('Failed to load data: $e');
-    } finally {
-      setState(() => isLoading = false);
-    }
-  }
-
-  Future<void> _loadAllRequests() async {
-    // TODO: Replace with actual API call
-    // final response = await ApiService.getAllRoommateRequests();
-    // setState(() => allRequests = response);
-
-    // Mock data for now
-    await Future.delayed(Duration(milliseconds: 500));
-    setState(() {
-      allRequests = [
-        RoommateRequest(
-          id: 'req001',
-          studentId: 'student123',
-          roomId: 'room567',
-          preferences: 'Looking for a quiet roommate who likes to cook',
-          status: 'OPEN',
-          studentName: 'John Doe',
-          roomNumber: 'A-101',
-        ),
-        RoommateRequest(
-          id: 'req002',
-          studentId: 'student789',
-          roomId: 'room890',
-          preferences: 'Need someone who is clean and studies late',
-          status: 'OPEN',
-          studentName: 'Jane Smith',
-          roomNumber: 'B-205',
-        ),
-      ];
-    });
-  }
-
-  Future<void> _loadMyRequests() async {
-    // TODO: Replace with actual API call
-    // final studentId = await TokenCacheService.getStudentId();
-    // final response = await ApiService.getMyRoommateRequests(studentId);
-    // setState(() => myRequests = response);
-
-    // Mock data for now
-    await Future.delayed(Duration(milliseconds: 300));
-    setState(() {
-      myRequests = [
-        RoommateRequest(
-          id: 'req003',
-          studentId: 'currentUser',
-          roomId: 'room456',
-          preferences: 'Looking for someone who likes music and is social',
-          status: 'OPEN',
-          studentName: 'You',
-          roomNumber: 'C-301',
-        ),
-      ];
-    });
-  }
-
-  Future<void> _loadJoinedRequests() async {
-    // TODO: Replace with actual API call
-    // final studentId = await TokenCacheService.getStudentId();
-    // final response = await ApiService.getJoinedRoommateRequests(studentId);
-    // setState(() => joinedRequests = response);
-
-    // Mock data for now
-    await Future.delayed(Duration(milliseconds: 200));
-    setState(() {
-      joinedRequests = [
-        RoommateRequest(
-          id: 'req004',
-          studentId: 'student999',
-          roomId: 'room111',
-          preferences: 'Early sleeper, likes reading',
-          status: 'FILLED',
-          partnerStudentId: 'currentUser',
-          studentName: 'Alice Johnson',
-          roomNumber: 'D-102',
-        ),
-      ];
-    });
-  }
-
-  Future<void> _createRoommateRequest() async {
-    final result = await showDialog<RoommateRequest>(
-      context: context,
-      builder: (context) => CreateRoommateRequestDialog(),
-    );
-
-    if (result != null) {
-      try {
-        // TODO: Replace with actual API call
-        // await ApiService.createRoommateRequest(result);
-
-        _showSuccessSnackbar('Roommate request created successfully!');
-        _loadData(); // Reload data
-      } catch (e) {
-        _showErrorSnackbar('Failed to create request: $e');
-      }
-    }
-  }
-
-  Future<void> _joinRequest(RoommateRequest request) async {
-    final result = await showDialog<JoinRequestData>(
-      context: context,
-      builder: (context) => JoinRequestDialog(),
-    );
-
-    if (result != null) {
-      try {
-        // TODO: Replace with actual API call
-        // await ApiService.joinRoommateRequest(request.id, result);
-
-        _showSuccessSnackbar('Successfully joined the roommate request!');
-        _loadData(); // Reload data
-      } catch (e) {
-        _showErrorSnackbar('Failed to join request: $e');
-      }
-    }
-  }
-
-  Future<void> _cancelRequest(RoommateRequest request) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Cancel Request'),
-        content: Text('Are you sure you want to cancel this roommate request?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text('No'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text('Yes', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed == true) {
-      try {
-        // TODO: Replace with actual API call
-        // await ApiService.cancelRoommateRequest(request.id);
-
-        _showSuccessSnackbar('Roommate request cancelled successfully!');
-        _loadData(); // Reload data
-      } catch (e) {
-        _showErrorSnackbar('Failed to cancel request: $e');
-      }
-    }
-  }
-
-  void _showSuccessSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.green),
-    );
-  }
-
-  void _showErrorSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.red),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: Text('Roommate Requests'),
+        title: const Text('Roommate Requests'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -221,255 +47,191 @@ class _RoommateRequestsScreenState extends State<RoommateRequestsScreen> with Ti
           labelColor: Colors.blue,
           unselectedLabelColor: Colors.grey,
           indicatorColor: Colors.blue,
-          tabs: [
-            Tab(
-              icon: Icon(Icons.public),
-              text: 'All Requests',
-            ),
-            Tab(
-              icon: Icon(Icons.person),
-              text: 'My Requests',
-            ),
-            Tab(
-              icon: Icon(Icons.handshake),
-              text: 'Joined',
-            ),
+          tabs: const [
+            Tab(icon: Icon(Icons.public), text: 'All Requests'),
+            Tab(icon: Icon(Icons.person), text: 'My Requests'),
+            Tab(icon: Icon(Icons.handshake), text: 'Joined'),
           ],
         ),
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : TabBarView(
+      body: TabBarView(
         controller: _tabController,
         children: [
-          _buildAllRequestsTab(),
-          _buildMyRequestsTab(),
-          _buildJoinedRequestsTab(),
+          _buildFutureTab(viewModel.loadAllRequests(),
+              emptyIcon: Icons.search_off,
+              emptyMessage: "No roommate requests available"
+          ),
+          _buildFutureTab(viewModel.loadMyRequests(),
+              emptyIcon: Icons.inbox,
+              emptyMessage: "You haven't created any requests yet"
+          ),
+          _buildFutureTab(viewModel.loadJoinedRequests(),
+              emptyIcon: Icons.group_off,
+              emptyMessage: "You haven't joined any requests yet"),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _createRoommateRequest,
-        backgroundColor: Colors.blue,
-        icon: Icon(Icons.add),
-        label: Text('Create Request'),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () => viewModel.createRoommateRequest(context),
+      //   backgroundColor: Colors.blue,
+      //   icon: const Icon(Icons.add),
+      //   label: const Text('Create Request'),
+      // ),
     );
   }
 
-  Widget _buildAllRequestsTab() {
-    if (allRequests.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.search_off, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text(
-              'No roommate requests available',
-              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: _loadAllRequests,
-      child: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: allRequests.length,
-        itemBuilder: (context, index) {
-          final request = allRequests[index];
-          return _buildRequestCard(
-            request: request,
-            showJoinButton: true,
-            onJoin: () => _joinRequest(request),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildMyRequestsTab() {
-    if (myRequests.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.inbox, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text(
-              'You haven\'t created any requests yet',
-              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Tap the + button to create your first request',
-              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: _loadMyRequests,
-      child: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: myRequests.length,
-        itemBuilder: (context, index) {
-          final request = myRequests[index];
-          return _buildRequestCard(
-            request: request,
-            showCancelButton: true,
-            onCancel: () => _cancelRequest(request),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildJoinedRequestsTab() {
-    if (joinedRequests.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.group_off, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text(
-              'You haven\'t joined any requests yet',
-              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: _loadJoinedRequests,
-      child: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: joinedRequests.length,
-        itemBuilder: (context, index) {
-          final request = joinedRequests[index];
-          return _buildRequestCard(request: request);
-        },
-      ),
-    );
-  }
-
-  Widget _buildRequestCard({
-    required RoommateRequest request,
-    bool showJoinButton = false,
-    bool showCancelButton = false,
-    VoidCallback? onJoin,
-    VoidCallback? onCancel,
-  }) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 16),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+  Widget _buildFutureTab(
+      Future<List<RoommateRequest>> future, {
+        required IconData emptyIcon,
+        required String emptyMessage,
+      }) {
+    return FutureBuilder<List<RoommateRequest>>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text("Error: ${snapshot.error}"));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.blue[100],
-                  child: Text(
-                    request.studentName[0].toUpperCase(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue[800],
-                    ),
-                  ),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        request.studentName,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        'Room ${request.roomNumber}',
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: request.status == 'OPEN' ? Colors.green[100] : Colors.orange[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    request.status,
-                    style: TextStyle(
-                      color: request.status == 'OPEN' ? Colors.green[800] : Colors.orange[800],
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
+                Icon(emptyIcon, size: 64, color: Colors.grey),
+                const SizedBox(height: 16),
+                Text(emptyMessage, style: TextStyle(fontSize: 18, color: Colors.grey[600])),
               ],
             ),
-            SizedBox(height: 12),
-            Text(
-              'Preferences:',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                color: Colors.grey[700],
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            setState(() {}); // re-trigger FutureBuilder
+          },
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              final request = snapshot.data![index];
+              return _buildRequestCard(request);
+            },
+          ),
+        );
+      },
+    );
+  }
+
+
+  Widget _buildRequestCard(RoommateRequest request) {
+    return Card(
+      color: Colors.white,
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.blue[100],
+                child: Text(
+                  request.requesterId[0].toUpperCase(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue[800],
+                  ),
+                ),
               ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              request.preferences,
-              style: TextStyle(fontSize: 14),
-            ),
-            if (showJoinButton || showCancelButton) ...[
-              SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (showJoinButton && request.status == 'OPEN')
-                    ElevatedButton.icon(
-                      onPressed: onJoin,
-                      icon: Icon(Icons.handshake, size: 18),
-                      label: Text('Join Request'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                      ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        request.requesterId,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
                     ),
-                  if (showCancelButton)
-                    ElevatedButton.icon(
-                      onPressed: onCancel,
-                      icon: Icon(Icons.cancel, size: 18),
-                      label: Text('Cancel'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                      ),
+                    Text(
+                        "Room ${request.roomId}",
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14)
                     ),
-                ],
+                  ],
+                ),
               ),
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: request.open
+                      ? Colors.green[100]
+                      : Colors.orange[100],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(request.open ? "Open" : "Closed",
+                    style: TextStyle(
+                        color: request.open
+                            ? Colors.green[800]
+                            : Colors.orange[800],
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500)),
+              )
             ],
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          Text("Preferences:",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Colors.grey[700])),
+          const SizedBox(height: 4),
+          Text(request.preferences, style: const TextStyle(fontSize: 14)),
+
+          // 👇 Actions handled here
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (request.open && request.requesterId != viewModel.currentUserId.value)
+                ElevatedButton.icon(
+                  onPressed: () {
+
+                    late RoomDao rmDao;
+
+                    for(final rm in roomViewModel.rooms) {
+                      if (rm.id == request.roomId) {
+                        rmDao = rm;
+                      }
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RoomDetail(room: rmDao)
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.handshake, size: 18),
+                  label: const Text('Join Request'),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white),
+                ),
+              const SizedBox(width: 8),
+              if (request.requesterId == viewModel.currentUserId.value) // add a flag in DTO or check requesterId == currentUser.id
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    await viewModel.cancelRequest(context, request.id, request.requesterId);
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.cancel, size: 18),
+                  label: const Text('Cancel'),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white),
+                ),
+            ],
+          )
+        ]),
       ),
     );
   }
 }
-

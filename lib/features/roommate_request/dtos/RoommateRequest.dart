@@ -1,34 +1,34 @@
 class RoommateRequest {
   final String id;
-  final String studentId;
+  final String requesterId;
   final String roomId;
   final String preferences;
-  final String status;
-  final String? partnerStudentId;
-  final String studentName;
-  final String roomNumber;
+  final bool open;
+  final List<String> joinedStudentIds;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   RoommateRequest({
     required this.id,
-    required this.studentId,
+    required this.requesterId,
     required this.roomId,
     required this.preferences,
-    required this.status,
-    this.partnerStudentId,
-    required this.studentName,
-    required this.roomNumber,
+    required this.open,
+    required this.joinedStudentIds,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory RoommateRequest.fromJson(Map<String, dynamic> json) {
     return RoommateRequest(
-      id: json['id'],
-      studentId: json['studentId'],
-      roomId: json['roomId'],
-      preferences: json['preferences'],
-      status: json['status'],
-      partnerStudentId: json['partnerStudentId'],
-      studentName: json['studentName'] ?? 'Unknown',
-      roomNumber: json['roomNumber'] ?? 'Unknown',
+      id: json['id'] ?? '',
+      requesterId: json['requesterId'] ?? '',
+      roomId: json['roomId'] ?? '',
+      preferences: json['preferences'] ?? '',
+      open: json['open'] ?? false,
+      joinedStudentIds: List<String>.from(json['joinedStudentIds'] ?? []),
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
