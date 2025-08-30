@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import '../../core/cache/token_cache_service.dart';
 import '../favorites/controllers/favorites_controller.dart';
 import '../favorites/favorites.dart';
+import '../roommate_request/RoommateRequestsScreen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -107,6 +108,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     title: 'My bookings',
                     color: Colors.blue,
                     widget: BookingHistory()
+                  ),
+                  _buildDrawerItem(
+                      icon: Icons.people,
+                      title: 'Roommate Requests',
+                      color: Colors.purple,
+                      widget: RoommateRequestsScreen()
                   ),
                   _buildDrawerItem(
                     icon: CupertinoIcons.hammer,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_body_text.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_header_text.dart';
-import 'package:hostel_finder/utils/vertical_item_spacer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../roommate_request/widgets/CreateRoommateRequestDialog.dart';
+import '../../../roommate_request/widgets/ExistingRoommateRequestsSheet.dart';
 import '../../dao/room_dao.dart';
 
 class RoomEnquiry {
-
   void showBottomModalSheet(BuildContext context, RoomDao room) {
     showModalBottomSheet(
       context: context,
@@ -49,7 +49,8 @@ class RoomEnquiry {
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(6),
@@ -63,13 +64,16 @@ class RoomEnquiry {
                             ),
                             const SizedBox(width: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: CustomAppBodyText(
-                                text: "${room.capacity} ${room.capacity == 1 ? 'person' : 'people'}",
+                                text: "${room.capacity} ${room.capacity == 1
+                                    ? 'person'
+                                    : 'people'}",
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 textColor: Colors.white,
@@ -77,7 +81,8 @@ class RoomEnquiry {
                             ),
                             const SizedBox(width: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(6),
@@ -102,7 +107,8 @@ class RoomEnquiry {
                               textColor: Colors.white,
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: room.status.toLowerCase() == 'available'
                                     ? Colors.green.shade600
@@ -155,7 +161,91 @@ class RoomEnquiry {
                       fontWeight: FontWeight.bold,
                     ),
                     const SizedBox(height: 12),
-                    ...room.amenities.map((amenity) => _buildAmenityItem(amenity)),
+                    ...room.amenities.map((amenity) =>
+                        _buildAmenityItem(amenity)),
+                    const SizedBox(height: 20),
+                  ],
+
+                  // Roommate Options Section
+                  if (room.capacity > 1 &&
+                      room.status.toLowerCase() == 'available') ...[
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.purple.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.purple.shade200),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.people, color: Colors.purple.shade600,
+                                  size: 20),
+                              const SizedBox(width: 8),
+                              const CustomAppBodyText(
+                                text: "Roommate Options",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          const CustomAppBodyText(
+                            text: "This room can accommodate multiple people. You can either book alone and get matched with roommates, or create a roommate request to find compatible roommates before booking.",
+                            fontSize: 14,
+                            textColor: Colors.grey,
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  onPressed: () =>
+                                      _createRoommateRequest(context, room),
+                                  icon: Icon(Icons.person_search, size: 16,
+                                      color: Colors.purple.shade600),
+                                  label: const CustomAppBodyText(
+                                    text: "Find Roommate",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                  ),
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 8),
+                                    side: BorderSide(
+                                        color: Colors.purple.shade600),
+                                    foregroundColor: Colors.purple.shade600,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  onPressed: () =>
+                                      _viewExistingRequests(context, room),
+                                  icon: Icon(Icons.search, size: 16,
+                                      color: Colors.purple.shade600),
+                                  label: const CustomAppBodyText(
+                                    text: "Join Request",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                  ),
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 8),
+                                    side: BorderSide(
+                                        color: Colors.purple.shade600),
+                                    foregroundColor: Colors.purple.shade600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 20),
                   ],
 
@@ -172,7 +262,8 @@ class RoomEnquiry {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.info, color: Colors.blue.shade600, size: 20),
+                            Icon(Icons.info, color: Colors.blue.shade600,
+                                size: 20),
                             const SizedBox(width: 8),
                             const CustomAppBodyText(
                               text: "Booking Information",
@@ -182,11 +273,16 @@ class RoomEnquiry {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildInfoRow(Icons.payment, "Payment", "GHS${room.price.toInt()} per semester"),
+                        _buildInfoRow(Icons.payment, "Payment", "GHS${room.price
+                            .toInt()} per semester"),
                         const SizedBox(height: 8),
-                        _buildInfoRow(Icons.person, "Capacity", "${room.capacity} ${room.capacity == 1 ? 'person' : 'people'}"),
+                        _buildInfoRow(Icons.person, "Capacity", "${room
+                            .capacity} ${room.capacity == 1
+                            ? 'person'
+                            : 'people'}"),
                         const SizedBox(height: 8),
-                        _buildInfoRow(Icons.wc, "Gender", "${room.gender} students only"),
+                        _buildInfoRow(Icons.wc, "Gender", "${room
+                            .gender} students only"),
                         const SizedBox(height: 8),
                         _buildInfoRow(
                           room.status.toLowerCase() == 'available'
@@ -227,7 +323,8 @@ class RoomEnquiry {
                           onPressed: room.status.toLowerCase() == 'available'
                               ? () => _confirmBooking(context, room)
                               : null,
-                          icon: const Icon(Icons.bookmark_add, color: Colors.white),
+                          icon: const Icon(
+                              Icons.bookmark_add, color: Colors.white),
                           label: CustomAppBodyText(
                             text: room.status.toLowerCase() == 'available'
                                 ? "Book Now"
@@ -236,7 +333,8 @@ class RoomEnquiry {
                             textColor: Colors.white,
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: room.status.toLowerCase() == 'available'
+                            backgroundColor: room.status.toLowerCase() ==
+                                'available'
                                 ? const Color(0xFF3B82F6)
                                 : Colors.grey.shade400,
                             padding: const EdgeInsets.all(16),
@@ -253,6 +351,45 @@ class RoomEnquiry {
           },
         );
       },
+    );
+  }
+
+  void _createRoommateRequest(BuildContext context, RoomDao room) async {
+    Navigator.pop(context); // Close bottom sheet first
+
+    // Show create roommate request dialog with pre-selected room
+    final result = await showDialog(
+      context: context,
+      builder: (context) => CreateRoommateRequestDialog(
+        preSelectedRoomId: room.id,
+        preSelectedRoomNumber: room.number,
+      ),
+    );
+
+    if (result != null) {
+      // TODO: Handle the roommate request creation
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Roommate request created successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
+
+  void _viewExistingRequests(BuildContext context, RoomDao room) {
+    Navigator.pop(context); // Close bottom sheet first
+
+    // Show existing roommate requests for this room
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (context) => ExistingRoommateRequestsSheet(room: room),
     );
   }
 
