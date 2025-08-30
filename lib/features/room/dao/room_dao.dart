@@ -1,6 +1,7 @@
 class RoomDao {
   final String id;
   final String number;
+  final String hostelName;
   final String type;
   final int capacity;
   final double price;
@@ -13,6 +14,7 @@ class RoomDao {
   RoomDao({
     required this.id,
     required this.number,
+    required this.hostelName,
     required this.type,
     required this.capacity,
     required this.price,
@@ -25,16 +27,17 @@ class RoomDao {
 
   factory RoomDao.fromJson(Map<String, dynamic> json) {
     return RoomDao(
-      id: json['id'],
-      number: json['number'],
-      type: json['type'],
-      capacity: json['capacity'],
+      id: json['id'] ?? '',
+      number: json['number'] ?? '',
+      hostelName: json['hostelName'] ?? '',
+      type: json['type'] ?? '',
+      capacity: json['capacity'] ?? 0,
       price: (json['price'] as num).toDouble(),
       amenities: List<String>.from(json['amenities']),
-      status: json['status'],
-      description: json['description'],
+      status: json['status'] ?? '',
+      description: json['description'] ?? '',
       images: List<String>.from(json['images']),
-      gender: json['gender'],
+      gender: json['gender'] ?? '',
     );
   }
 
@@ -42,6 +45,7 @@ class RoomDao {
     return {
       'id': id,
       'number': number,
+      'hostelName': hostelName,
       'type': type,
       'capacity': capacity,
       'price': price,

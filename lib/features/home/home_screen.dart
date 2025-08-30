@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hostel_finder/core/app_routes.dart';
 import 'package:hostel_finder/core/cache/user_cache_service.dart';
 import 'package:hostel_finder/core/naviagtor/app_navigator.dart';
-import 'package:hostel_finder/core/user/user_model.dart';
 import 'package:hostel_finder/features/all_hostels/all_rooms_screen.dart';
 import 'package:hostel_finder/features/bookings/booking_history.dart';
 import 'package:hostel_finder/features/home/widgets/popular_hostels.dart';
@@ -35,9 +34,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _slideController;
 
-  final UserCacheService userCacheService = UserCacheService();
-  late User user;
-
 
   @override
   void initState() {
@@ -64,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _loadInitDataRooms() async {
-    user = (await UserCacheService.getUser())!;
     _fadeController.forward();
     _slideController.forward();
   }
@@ -79,24 +74,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         child: Column(
           children: [
             // Profile Section
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: Colors.white),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=3'), // replace with user image
-              ),
-              accountName: Text(
-                user.fullName,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+            FutureBuilder(future: UserCacheService.getUser(), builder: (context, snapshot) {
+              return UserAccountsDrawerHeader(
+                decoration: BoxDecoration(color: Colors.white),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=3'), // Todo: replace with user image
                 ),
-              ),
-              accountEmail: Text(
-                user.email,
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-              ),
-            ),
+                accountName: Text(
+                  snapshot.data!.fullName,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                accountEmail: Text(
+                  snapshot.data!.email,
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                ),
+              );
+            }),
 
             // Menu Items
             Expanded(
@@ -152,8 +149,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ListTile(
-                leading: Icon(Icons.logout, color: Colors.black),
-                title: Text(
+                leading: const Icon(Icons.logout, color: Colors.redAccent),
+                title: const Text(
                   'Logout',
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
@@ -161,27 +158,81 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   bool? confirmLogout = await showDialog<bool>(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text('Confirm Logout'),
-                      content: Text('Are you sure you want to log out?'),
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                      actionsPadding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                      title: Row(
+                        children: const [
+                          Icon(Icons.logout_rounded, color: Colors.redAccent, size: 28),
+                          SizedBox(width: 12),
+                          Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                      content: const Text(
+                        'Are you sure you want to log out of your account?',
+                        style: TextStyle(fontSize: 15, color: Colors.black87, height: 1.4),
+                      ),
+                      actionsAlignment: MainAxisAlignment.spaceBetween,
                       actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(false),
-                          child: Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(true),
-                          child: Text('Logout'),
-                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(color: Colors.grey.shade400),
+                                  foregroundColor: Colors.grey[800],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                ),
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(width: 8.0),
+
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.redAccent,
+                                  foregroundColor: Colors.white,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                ),
+                                onPressed: () => Navigator.of(context).pop(true),
+                                child: const Text(
+                                  'Logout',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   );
 
                   if (confirmLogout == true) {
-                    // Clear the auth token
                     await TokenCacheService.clearToken();
-
-                    // Navigate to login screen and remove all previous routes
-                    if(context.mounted) {
+                    if (context.mounted) {
                       setState(() {
                         AppNavigator.popAllUntil(context, AppRoutes.loginScreen);
                       });
@@ -189,7 +240,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   }
                 },
               ),
-            ),
+            )
+
           ],
         ),
       ),

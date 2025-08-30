@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:hostel_finder/core/cache/user_cache_service.dart';
-import 'package:hostel_finder/core/user/user_view_model.dart';
+import 'package:hostel_finder/core/user/user_model.dart';
 import 'package:hostel_finder/features/maintenance/maintenance_model.dart';
 
 import '../../core/app_urls/app_urls.dart';
@@ -11,19 +11,19 @@ import '../../core/request_interceptor/auth_client.dart';
 
 class MaintenanceViewModel {
 
-  final UserViewModel _userViewModel = Get.find<UserViewModel>();
-
   // Error message
   final RxString errorMessage = ''.obs;
 
   /// Fetch user data by email
-  Future<void> requestMaintenance(String roomId, String complaint) async {
+  Future<void> requestMaintenance(BuildContext context, String roomId, String complaint) async {
 
     try {
 
+      User? user = await UserCacheService.getUser();
+
       final client = AuthClient();
       final response = await client.post(
-          AppUrls.requestMaintenanceUrl(_userViewModel.user.value!.id),
+          AppUrls.requestMaintenanceUrl(user!.id),
           body: jsonEncode(
             {
               "roomId": roomId,
@@ -34,13 +34,14 @@ class MaintenanceViewModel {
 
       if (response.statusCode == 200) {
 
-        final data = jsonDecode(response.body)['data'];
-
-
-        log("THE USER DATA: ${response.body}");
+        if(context.mounted) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Get.snackbar('Success', 'Maintenance request submitted');
+        }
 
       } else {
-        errorMessage.value = 'Failed to fetch user: ${response.statusCode}';
+        errorMessage.value = 'Failed to send request: ${response.statusCode}';
       }
     } catch (e) {
       errorMessage.value = 'An error occurred: $e';
@@ -57,15 +58,10 @@ class MaintenanceViewModel {
         AppUrls.fetchUserMaintenanceRequestsUrl(user!.id),
       );
 
-      log("THE MAINTENANCE: ${response.statusCode}");
-
       if (response.statusCode == 200) {
-        // Since your API returns a direct array, decode it directly
+
         final data = jsonDecode(response.body) as List<dynamic>;
-
         final result = data.map((result) => MaintenanceModel.fromJson(result)).toList();
-
-        log('THE RESULT: ${result}');
 
         return result;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_finder/features/bookings/booking_helper.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_body_text.dart';
 import 'package:hostel_finder/shared/custom_app_labels/custom_app_header_text.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -467,215 +468,235 @@ class RoomEnquiry {
     }
   }
 
+
   void _showContactInfo(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const CustomAppHeaderText(
-          text: "Contact Information",
-          size: 18,
-          fontWeight: FontWeight.bold,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CustomAppBodyText(
-              text: "For booking inquiries and more information about this room, please contact:",
-              fontSize: 14,
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        insetPadding: const EdgeInsets.all(20),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title
+              Row(
                 children: [
-                  CustomAppBodyText(
-                    text: "📞 Phone: +233 XX XXX XXXX",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                  const Icon(Icons.info_outline, color: Color(0xFF3B82F6)),
+                  const SizedBox(width: 8),
+                  const CustomAppHeaderText(
+                    text: "Contact Information",
+                    size: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  SizedBox(height: 4),
-                  CustomAppBodyText(
-                    text: "📧 Email: bookings@hostel.com",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  )
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+
+              // Description
+              const CustomAppBodyText(
+                text:
+                "For booking inquiries and more information about this room, please contact:",
+                fontSize: 14,
+              ),
+              const SizedBox(height: 16),
+
+              // Contact Card
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    CustomAppBodyText(
+                      text: "📞 Phone: +233 XX XXX XXXX",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    SizedBox(height: 6),
+                    CustomAppBodyText(
+                      text: "📧 Email: bookings@hostel.com",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Actions
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        side: const BorderSide(color: Color(0xFF3B82F6)),
+                      ),
+                      child: const CustomAppBodyText(
+                        text: "Close",
+                        fontWeight: FontWeight.w600,
+                        textColor: Color(0xFF3B82F6),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _launchPhoneCall(context, "+233XXXXXXXXX");
+                      },
+                      icon: const Icon(Icons.call, size: 18),
+                      label: const CustomAppBodyText(
+                        text: "Call Now",
+                        fontWeight: FontWeight.w600,
+                        textColor: Colors.white,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        actions: [
-          Row(
-            children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const CustomAppBodyText(
-                    text: "Close",
-                    fontWeight: FontWeight.w600,
-                    textColor: Color(0xFF3B82F6),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _launchPhoneCall(context, "+233XXXXXXXXX");
-                  },
-                  icon: const Icon(Icons.call, size: 16),
-                  label: const CustomAppBodyText(
-                    text: "Call Now",
-                    fontWeight: FontWeight.w600,
-                    textColor: Colors.white,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
+
+
 
   void _confirmBooking(BuildContext context, RoomDao room) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const CustomAppHeaderText(
-          text: "Confirm Booking",
-          size: 18,
-          fontWeight: FontWeight.bold,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomAppBodyText(
-              text: "Are you sure you want to book Room ${room.number}?",
-              fontSize: 14,
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title
+              Row(
                 children: [
-                  CustomAppBodyText(
-                    text: "Room: ${room.number} (${room.type})",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  CustomAppBodyText(
-                    text: "Price: GHS${room.price.toInt()} per semester",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  CustomAppBodyText(
-                    text: "Capacity: ${room.capacity} ${room.capacity == 1 ? 'person' : 'people'}",
-                    fontWeight: FontWeight.w600,
+                  const Icon(Icons.event_available, color: Color(0xFF3B82F6), size: 26),
+                  const SizedBox(width: 8),
+                  const CustomAppHeaderText(
+                    text: "Confirm Booking",
+                    size: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+
+              // Main prompt
+              CustomAppBodyText(
+                text: "Are you sure you want to book Room ${room.number}?",
+                fontSize: 14,
+                textColor: Colors.black87,
+              ),
+              const SizedBox(height: 16),
+
+              // Room details card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomAppBodyText(
+                      text: "Room: ${room.number} (${room.type})",
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 6),
+                    CustomAppBodyText(
+                      text: "Price: GHS${room.price.toInt()} per semester",
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 6),
+                    CustomAppBodyText(
+                      text: "Capacity: ${room.capacity} ${room.capacity == 1 ? 'person' : 'people'}",
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const CustomAppBodyText(
+                        text: "Cancel",
+                        fontWeight: FontWeight.w600,
+                        textColor: Colors.grey,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        Navigator.pop(context); // Close confirmation dialog
+                        await BookingHelper.handleBooking(context, room);
+                        if (context.mounted) Navigator.pop(context); // Close bottom sheet
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF3B82F6),
+                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const CustomAppBodyText(
+                        text: "Confirm Booking",
+                        fontWeight: FontWeight.w600,
+                        textColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const CustomAppBodyText(
-              text: "Cancel",
-              fontWeight: FontWeight.w600,
-              textColor: Colors.grey,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context); // Close the bottom sheet too
-              _showBookingSuccess(context, room);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF3B82F6),
-            ),
-            child: const CustomAppBodyText(
-              text: "Confirm Booking",
-              fontWeight: FontWeight.w600,
-              textColor: Colors.white,
-            ),
-          ),
-        ],
       ),
     );
   }
 
-  void _showBookingSuccess(BuildContext context, RoomDao room) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Colors.green,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 32,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const CustomAppHeaderText(
-              text: "Booking Submitted!",
-              size: 18,
-              fontWeight: FontWeight.bold,
-            ),
-            const SizedBox(height: 8),
-            CustomAppBodyText(
-              text: "Your booking request for Room ${room.number} has been submitted. You will be contacted shortly to complete the process.",
-              fontSize: 14,
-              maxLines: 3,
-            ),
-          ],
-        ),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF3B82F6),
-              minimumSize: const Size(double.infinity, 48),
-            ),
-            child: const CustomAppBodyText(
-              text: "Done",
-              fontWeight: FontWeight.w600,
-              textColor: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   void _launchPhoneCall(BuildContext context, String phoneNumber) async {
     final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);

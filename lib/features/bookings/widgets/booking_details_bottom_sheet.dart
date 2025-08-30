@@ -192,14 +192,12 @@ class _BookingDetailsBottomSheetState extends State<BookingDetailsBottomSheet> {
             ElevatedButton(
               onPressed: () async {
 
-                await _maintenanceViewModel.requestMaintenance(roomId, descriptionController.text);
+                await _maintenanceViewModel.requestMaintenance(
+                    context,
+                    roomId,
+                    descriptionController.text
+                );
 
-                if(context.mounted) {
-                  setState(() {
-                    Navigator.pop(context);
-                    Get.snackbar('Success', 'Maintenance request submitted');
-                  });
-                }
               },
               child: Text('Submit'),
             ),

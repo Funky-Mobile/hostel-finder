@@ -15,4 +15,7 @@ class AppUrls {
   static Uri requestMaintenanceUrl(String studentId) => Uri.parse('$_baseUrl/maintenance/$studentId/request');
   static Uri fetchUserMaintenanceRequestsUrl(String studentId) => Uri.parse('$_baseUrl/maintenance/$studentId');
 
+  static Uri get createBookingUrl => Uri.parse('$_baseUrl/bookings');
+  static Uri findStudentBookingsUrl(String studentId) => Uri.parse('$_baseUrl/bookings/student/$studentId');
+
 }
