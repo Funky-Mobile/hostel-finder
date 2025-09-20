@@ -21,7 +21,7 @@ android {
         create("release") {
             storeFile = file("my-release-key.jks")
             storePassword = "HOSTEL-FINDER"
-            keyAlias = "hostel-finder-key-alias"
+            keyAlias = "my-key-alias"
             keyPassword = "HOSTEL-FINDER"
         }
     }

@@ -26,8 +26,7 @@ void main() async {
 
   // check for token
   final token = await TokenCacheService.getToken();
-  final initialRoute =
-  token != null && token.isNotEmpty ? AppRoutes.homeScreen : AppRoutes.loginScreen;
+  final initialRoute = token != null && token.isNotEmpty ? AppRoutes.homeScreen : AppRoutes.loginScreen;
 
   runApp(MyApp(initialRoute: initialRoute));
 }
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,   
       theme: ThemeData(
         fontFamily: "Montserrat",
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
